@@ -1,0 +1,19 @@
+<!doctype html>
+<html lang="en">
+    <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>fp demo</title>
+  </head>
+  <body>
+    <script type="text/javascript" src="fp.js"></script>
+    <script type="text/javascript">
+      var reverse = fp.reduce((acc, x) => [x].concat(acc))([])
+      var last = fp.compose(fp.head, reverse)
+      console.log(last(['jumpkick', 'roundhouse', 'uppercut']))
+      fp.trace('compose')(fp.compose)
+      fp.trace('partially applied', fp.reduce(fp.add), true)
+      fp.doc.trace(fp.head)
+    </script>
+  </body>
+</html>
