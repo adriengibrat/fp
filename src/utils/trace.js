@@ -1,7 +1,10 @@
-import {signature} from 'utils/doc'
+import {signature} from 'symbols'
 
-/* global Function: false, console: false */
+trace[signature] = 'trace :: String → α → α'
 
-export default function trace(tag, x) { return (Function('tag, x', 'tag && console.log(tag); console.dir(x)')(tag, x), x) }
+/* global console: false */
 
-trace[signature] = 'String → x → x'
+export default function trace (tag, value) {
+	console.log(`${tag} %1$O\n%1$s`, value)
+	return value
+}

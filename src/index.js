@@ -1,32 +1,29 @@
-import doc, {signature} from 'utils/doc'
+import { version } from '../package.json'
+import assign from 'utils/object/assign'
+import equals from 'utils/object/_equals'
+import doc from 'utils/doc'
 import trace from 'utils/trace'
-import compose, {composeTrace} from './compose'
-import curry, {curryN, curryDebug} from './curry'
-import * as stringMethods from 'fn/string'
-import * as arrayMethods from 'fn/array'
+import path from 'utils/path'
+import map from 'utils/map'
+import {placeholder} from 'symbols'
+import partial from 'partial'
+import curry from 'curry'
+import compose from 'compose'
+import arity from 'arity'
+import not from 'not'
+import * as functions from 'functions'
 
-curry.debug = curryDebug
-compose.trace = composeTrace
+import collection, {filter} from './collection'
 
-identity[signature] = 'x → x'
-function identity(x) { return x }
-
-// String → String
-head[signature] = '[x] → x|undefined'
-function head(list) { return list[0] }
-
-add[signature] = 'Number → Number → Number'
-function add(x, y) { return x + y }
-
-let objectMap = (fn, object) => Object.keys(object).reduce((target, key) => (target[key] = fn(object[key]), target), {})
-const fp = objectMap(curryDebug, {
-	doc, trace,
-	compose, curry, curryN,
-	identity, head, add,
-	...stringMethods,
-	...arrayMethods
-})
-let copy = (target, alias) => Object.keys(alias).forEach((key) => target[key] = target[alias[key]])
-copy(fp, {first: 'head', id: 'identity'})
-
-export default fp
+export default assign(
+	collection
+	, {
+		version
+		, filter
+		, placeholder
+		, doc
+		, partial, curry, compose, arity, not
+	}
+	, functions
+	, map((fn) => curry.debug(fn), { trace, path, equals, map })
+)

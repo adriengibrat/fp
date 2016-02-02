@@ -1,33 +1,40 @@
-import {signature} from 'utils/doc'
+import {setArity, apply, getLength} from 'optims'
+import {signature, targetFn, placeholder} from 'symbols'
+import partial, {partialDebug} from 'partial'
 
-export default function curry(fn, arity = fn.length) {
-	if (arity <= 1) return fn // TODO remove shortcut in source, should be done later on
-	return function partial (...args) {
-		if (args.length >= arity) return fn.apply(this, args)
-		let curried = function () { return partial.apply(this, [...args, ...arguments]) }
-		Object.defineProperty(curried, 'length', {value: arity - args.length})
-		return curried
-	}()
+const curry = curryFactory(partial)
+const curryDebug = curryFactory(partialDebug, debug)
+
+curry[signature] = curryDebug[signature] = 'curry :: (α1, …, αN → β) A, ?Number N = A.length → (α1 → … → αN → β)'
+
+curry.placeholder = curryDebug.placeholder = placeholder
+
+curry.debug = curryDebug
+
+function curryFactory (partial, wrapper) {
+	return function curry (fn, arity = fn.length) {
+		arity = parseInt(arity, 10) || 0
+
+		const _curried = setArity(arity, function curried () {
+			return getLength(arguments, arity, placeholder) === arity ?
+				apply(fn, this, arguments) :
+				partial.call(this, _curried, arguments)
+		})
+
+		return wrapper ? wrapper(_curried, fn) : _curried
+	}
 }
 
-curry[signature] = curryDebug[signature] = '(* → x) → (* → x)'
+function debug (curried, fn) {
+	/* attach debug info */
+	const target = fn[targetFn] || fn
+	curried.toString = () => `/* curried */${target}`
+	curried[signature] = target[signature]
+	curried[targetFn] = target
 
-export function curryDebug (fn, arity = fn.length) {
-	arity = parseInt(arity) || 0
-	if (arity <= 1) return fn // TODO remove shortcut in source, should be done later on
-	Object.defineProperty(curried, 'length', {value: arity})
-	/* debug info */ curried.toString = () => `/* Curried */ ${fn}`
-	function curried () {
-		if (arguments.length >= arity) return fn.apply(this, arguments)
-		let partial = curried.bind(this, ...arguments) // bind allow to track info with chrome console trace
-		/* debug info */ partial.toString = curried.toString
-		return partial
-	}
 	return curried
 }
 
-export function curryN (arity, fn) {
-	return curry(fn, parseInt(arity, 10) || 0);
-}
+export {curryDebug}
 
-curryN[signature] = 'Number → ' + curry[signature]
+export default curry

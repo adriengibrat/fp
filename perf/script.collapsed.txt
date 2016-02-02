@@ -1,0 +1,34 @@
+_fp bench/collection.bench.js:21 5
+_lazy bench/collection.bench.js:23 5
+_lodash bench/collection.bench.js:22,object.,wrapperValue node_modules/lodash/core.js:1787,baseWrapperValue node_modules/lodash/core.js:984,reduce node_modules/lodash/core.js:2033,baseReduce node_modules/lodash/core.js:170, node_modules/lodash/core.js:1094, node_modules/lodash/core.js:171, node_modules/lodash/core.js:986 3
+_fp bench/collection.bench.js:21,reduce dist/fp.js:549,forEach dist/fp.js:718,forEach dist/fp.js:650,forEach dist/fp.js:718,forEach dist/fp.js:589,mappedIteratee dist/fp.js:720 2
+_lodash bench/collection.bench.js:22 2
+_lodash bench/collection.bench.js:22,object.,copyArray node_modules/lodash/core.js:951 2
+_lodash bench/collection.bench.js:22,object. 2
+_lodash bench/collection.bench.js:22,object.,wrapperValue node_modules/lodash/core.js:1787,baseWrapperValue node_modules/lodash/core.js:984,reduce node_modules/lodash/core.js:2033 2
+_lazy bench/collection.bench.js:23,map node_modules/lazy.js/lazy.js:3236 2
+_lazy bench/collection.bench.js:23,reduce node_modules/lazy.js/lazy.js:2192,each node_modules/lazy.js/lazy.js:642 2
+_lazy bench/collection.bench.js:23,reduce node_modules/lazy.js/lazy.js:2192,each node_modules/lazy.js/lazy.js:642,each node_modules/lazy.js/lazy.js:2958 2
+_fp bench/collection.bench.js:21,Collection.from dist/fp.js:766 1
+_fp bench/collection.bench.js:21,filter dist/fp.js:522 1
+_fp bench/collection.bench.js:21,reduce dist/fp.js:549 1
+_fp bench/collection.bench.js:21,reduce dist/fp.js:549,forEach dist/fp.js:718 1
+_fp bench/collection.bench.js:21,reduce dist/fp.js:549,forEach dist/fp.js:718,forEach dist/fp.js:650,forEach dist/fp.js:718 1
+_fp bench/collection.bench.js:21,reduce dist/fp.js:549,forEach dist/fp.js:718,forEach dist/fp.js:650,forEach dist/fp.js:718,forEach dist/fp.js:589 1
+_lodash bench/collection.bench.js:22,lodash node_modules/lodash/core.js:424 1
+_lodash bench/collection.bench.js:22,object.,lodash node_modules/lodash/core.js:424,LodashWrapper node_modules/lodash/core.js:437 1
+_lodash bench/collection.bench.js:22,object.,free@plt 1
+_lodash bench/collection.bench.js:22,object.,wrapperValue node_modules/lodash/core.js:1787 1
+_lodash bench/collection.bench.js:22,object.,wrapperValue node_modules/lodash/core.js:1787,baseWrapperValue node_modules/lodash/core.js:984 1
+_lodash bench/collection.bench.js:22,object.,wrapperValue node_modules/lodash/core.js:1787,baseWrapperValue node_modules/lodash/core.js:984,reduce node_modules/lodash/core.js:2033,baseReduce node_modules/lodash/core.js:170, node_modules/lodash/core.js:1094 1
+_lodash bench/collection.bench.js:22,object.,wrapperValue node_modules/lodash/core.js:1787,baseWrapperValue node_modules/lodash/core.js:984,reduce node_modules/lodash/core.js:2033,baseReduce node_modules/lodash/core.js:170, node_modules/lodash/core.js:1094, node_modules/lodash/core.js:171 1
+_lodash bench/collection.bench.js:22,object.,wrapperValue node_modules/lodash/core.js:1787,baseWrapperValue node_modules/lodash/core.js:984,reduce node_modules/lodash/core.js:2033,baseReduce node_modules/lodash/core.js:170, node_modules/lodash/core.js:1094, node_modules/lodash/core.js:171, node_modules/lodash/core.js:986,map node_modules/lodash/core.js:1992 1
+_lodash bench/collection.bench.js:22,object.,wrapperValue node_modules/lodash/core.js:1787,baseWrapperValue node_modules/lodash/core.js:984,reduce node_modules/lodash/core.js:2033,baseReduce node_modules/lodash/core.js:170, node_modules/lodash/core.js:1094, node_modules/lodash/core.js:171, node_modules/lodash/core.js:986,map node_modules/lodash/core.js:1992,baseMap node_modules/lodash/core.js:844, node_modules/lodash/core.js:1094 1
+_lodash bench/collection.bench.js:22,object.,wrapperValue node_modules/lodash/core.js:1787,baseWrapperValue node_modules/lodash/core.js:984,reduce node_modules/lodash/core.js:2033,baseReduce node_modules/lodash/core.js:170, node_modules/lodash/core.js:1094, node_modules/lodash/core.js:171, node_modules/lodash/core.js:986,filter node_modules/lodash/core.js:1871,baseFilter node_modules/lodash/core.js:578, node_modules/lodash/core.js:1094,isArrayLike node_modules/lodash/core.js:2561, node_modules/lodash/core.js:908 1
+_lodash bench/collection.bench.js:22,object.,wrapperValue node_modules/lodash/core.js:1787,baseWrapperValue node_modules/lodash/core.js:984,reduce node_modules/lodash/core.js:2033,baseReduce node_modules/lodash/core.js:170, node_modules/lodash/core.js:1094, node_modules/lodash/core.js:171, node_modules/lodash/core.js:986,filter node_modules/lodash/core.js:1871,baseFilter node_modules/lodash/core.js:578, node_modules/lodash/core.js:1094 1
+_lodash bench/collection.bench.js:22,object.,wrapperValue node_modules/lodash/core.js:1787,baseWrapperValue node_modules/lodash/core.js:984,reduce node_modules/lodash/core.js:2033,baseReduce node_modules/lodash/core.js:170, node_modules/lodash/core.js:1094, node_modules/lodash/core.js:171, node_modules/lodash/core.js:986,filter node_modules/lodash/core.js:1871,baseFilter node_modules/lodash/core.js:578, node_modules/lodash/core.js:1094, node_modules/lodash/core.js:580 1
+_lodash bench/collection.bench.js:22,object.,wrapperValue node_modules/lodash/core.js:1787,baseWrapperValue node_modules/lodash/core.js:984,reduce node_modules/lodash/core.js:2033,baseReduce node_modules/lodash/core.js:170, node_modules/lodash/core.js:1094, node_modules/lodash/core.js:171, node_modules/lodash/core.js:986,map node_modules/lodash/core.js:1992,baseMap node_modules/lodash/core.js:844 1
+_lazy bench/collection.bench.js:23,Lazy node_modules/lazy.js/lazy.js:101 1
+_lazy bench/collection.bench.js:23,map node_modules/lazy.js/lazy.js:620 1
+_lazy bench/collection.bench.js:23,reduce node_modules/lazy.js/lazy.js:2192 1
+_lazy bench/collection.bench.js:23,reduce node_modules/lazy.js/lazy.js:2192,each node_modules/lazy.js/lazy.js:642,each node_modules/lazy.js/lazy.js:2958, node_modules/lazy.js/lazy.js:644 1

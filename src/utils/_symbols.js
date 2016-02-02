@@ -1,0 +1,5 @@
+export const signature = Symbol('signature')
+export const targetFn = Symbol('targetFn')
+export const boundThis = Symbol('boundThis')
+export const partialArgs = Symbol('partialArgs')
+export const placeholder = Symbol('placeholder')

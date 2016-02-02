@@ -6,14 +6,61 @@
     <title>fp demo</title>
   </head>
   <body>
-    <script type="text/javascript" src="fp.js"></script>
+    <script type="text/javascript" src="dist/fp.js"></script>
+    <script type="text/javascript" src="dist/fp.monads.js"></script>
     <script type="text/javascript">
-      var reverse = fp.reduce((acc, x) => [x].concat(acc))([])
-      var last = fp.compose(fp.head, reverse)
-      console.log(last(['jumpkick', 'roundhouse', 'uppercut']))
-      fp.trace('compose')(fp.compose)
-      fp.trace('partially applied', fp.reduce(fp.add), true)
-      fp.doc.trace(fp.head)
+      //*
+      var reduce = fp.curry.debug(function reduce (reducer, accumulator, array) {
+        return array.reduce(reducer, accumulator)
+      })
+      //*/
+      var head = fp.curry((list) => list[0])
+      var add = fp.curry((x, y) => x + y)
+      var reverse = reduce((acc, x) => [x].concat(acc), [])
+      var last = fp.compose.debug(head, reverse)
+      console.trace(last(['jumpkick', 'roundhouse', 'uppercut']))
+      console.log('curried reduce %O', reduce)
+      console.log('composed last %O', last)
+      //fp.trace('compose')(fp.compose)
+      //fp.trace('reduce', fp.reduce)
+      //fp.trace('partially applied', fp.reduce(add))
+      //console.log(fp.map(add(1), {a:1, b:2, c:3}))
+      //console.log('doc parse %o', fp.map(fp.doc._parse, fp))
+
+      // parseDate :: String -> Either(Error, Date)
+      var parseDate = (date) => {
+        date = new Date(date)
+        return isNaN(date.getTime()) ?
+          fp.Left(Error('Date could not be parsed !')) :
+          fp.Right(date)
+      }
+
+      // shout :: Either(Error, Object) -> void
+      var shout = fp.curry(fp.either)(
+        console.trace.bind(console), 
+        fp.compose(
+          console.log.bind(console),
+          (string) => String(string).toUpperCase(),
+          fp.curry(function concat(a, b) { return a.concat(b) })('Date is ')
+        )
+      )
+  
+      var logDate = fp.compose(shout, parseDate)
+      logDate('2016-02-25')
+      logDate('this is not a valid date')
+
+      var jangoFett = {
+        occupation: 'Bounty Hunter',
+        genetics: 'superb'
+      }
+      var bobaFett = {
+        occupation: 'Bounty Hunter',
+        genetics: 'superb'
+      }
+      // Outputs: false
+      console.log(bobaFett === jangoFett)
+      // Outputs: true
+      console.log(fp.equals(bobaFett, jangoFett))
     </script>
   </body>
 </html>

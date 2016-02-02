@@ -1,26 +1,71 @@
 {
   "name": "fp",
   "version": "0.0.1",
-  "description": "ES6 Functional Programming",
+  "description": "Readable, debbuggable & fast ES6 Functional Programming",
   "author": "Adrien Gibrat <adrien.gibrat@gmail.com>",
   "license": "MIT",
   "main": "fp.js",
   "jsnext:main": "src/index.js",
-  "jsnext:paths": {
-    "fn/*": "src/fn/*.js",
-    "utils/*": "src/utils/*.js"
+  "engines": {
+    "npm": ">= 2.0.0"
+  },
+  "eslintConfig": {
+    "env": {
+      "browser": true,
+      "es6": true
+    },
+    "parserOptions": {
+      "ecmaVersion": 6,
+      "sourceType": "module"
+    }
   },
   "scripts": {
-    "start": "./start"
+    "start": "npm run watch",
+    "bench": "npm run bench:curry && npm run bench:collection",
+    "bench:curry": "node bench/curry.bench.js",
+    "bench:collection": "node bench/collection.bench.js",
+    "build": "npm run build:core && npm run build:core:min && npm run build:monads && npm run build:monads:min",
+    "build:core": "rollup --config --id fp --input src/index.js --output dist/fp.js",
+    "build:core:min": "rollup --config --environment BUILD:min --id fp --input src/index.js --output dist/fp.min.js",
+    "build:monads": "rollup --config --id fp.monads --globals fp:fp --input src/index.monads.js --output dist/fp.monads.js",
+    "build:monads:min": "rollup --config --environment BUILD:min --id fp.monads --globals fp:fp --input src/index.monads.js --output dist/fp.monads.min.js",
+    "check": "check-dependencies --verbose",
+    "perf": "npm run perf:init && npm run perf:collection",
+    "perf:init": "grep 1 /proc/sys/kernel/kptr_restrict > /dev/null && sudo sh -c 'echo 0 > /proc/sys/kernel/kptr_restrict && echo 1 > /proc/sys/kernel/perf_event_paranoid' || echo 'perf init already done'",
+    "perf:collection:record": "perf record -i -g -q -e cycles:u -- node --perf-basic-prof bench/collection.bench.js && npm run perf:script",
+    "perf:script": "LANG=C perf script | egrep -v ' __libc_start| LazyCompile | v8::internal::| Builtin:| Stub:| LoadIC:|\\[unknown\\]| LoadPolymorphicIC:' | stackcollapse-perf 2>/dev/null | grep runbench | sed 's/LazyCompile:[*~]\\?//g;s/node`//g;s|'$PWD'/||g;s/^.*runbench//' > perf/script.collapsed.txt",
+    "perf:collection:flamegraph": "stackvis collapsed < perf/script.collapsed.txt > perf/collection.flamegraph.html",
+    "perf:collection": "npm run perf:collection:record && npm run perf:collection:flamegraph",
+    "size": "npm run size:core --silent && npm run size:core:min --silent && npm run size:monads --silent && npm run size:monads:min --silent",
+    "size:core": "echo \"fp raw size `cat dist/fp.js | wc -c | numfmt --to=iec-i --suffix=B`\"",
+    "size:core:min": "echo \"fp minified & gzipped `gzip -9 -c dist/fp.min.js | wc -c | numfmt --to=iec-i --suffix=B`\"",
+    "size:monads": "echo \"fp.monads raw size `cat dist/fp.monads.js | wc -c | numfmt --to=iec-i --suffix=B`\"",
+    "size:monads:min": "echo \"fp.monads minified & gzipped `gzip -9 -c dist/fp.monads.min.js | wc -c | numfmt --to=iec-i --suffix=B`\"",
+    "test": "npm run test:partial && npm run test:curry && npm run test:compose",
+    "test:partial": "node test/partial.test.js",
+    "test:curry": "node test/curry.test.js",
+    "test:compose": "node test/compose.test.js",
+    "watch": "chokidar 'src/**/*.js' --command 'time npm run build:core --silent && echo \"build core done\" && time npm run build:monads --silent && echo \"build monads done\"'",
+    "watch:core": "chokidar 'src/**/*.js' --command 'time npm run build:core --silent && echo \"build core done\"'",
+    "watch:monads": "chokidar 'src/**/*.js' --command 'time npm run build:monads --silent && echo \"build monads done\"'"
   },
   "devDependencies": {
-    "babel": "^6.1.18",
-    "babel-plugin-transform-object-rest-spread": "^6.3.13",
-    "babel-preset-es2015-rollup": "^1.0.0",
-    "chokidar": "^1.3.0",
-    "rollup": "^0.21.0",
-    "rollup-plugin-babel": "^2.1.0",
-    "rollup-plugin-commonjs": "^1.4.0",
-    "rollup-plugin-npm": "^1.1.0"
+    "check-dependencies": "^0.12.0",
+    "chokidar-cli": "^1.2.0",
+    "rollup": "^0.26.1",
+    "rollup-plugin-buble": "^0.6.0",
+    "rollup-plugin-eslint": "^2.0.0",
+    "rollup-plugin-includepaths": "^0.1.2",
+    "rollup-plugin-json": "^2.0.0",
+    "rollup-plugin-uglify": "^0.3.1",
+    "tape": "^4.5.1"
+  },
+  "optionalDependencies": {
+    "benchmark": "^2.1.0",
+    "flamegraph": "^0.7.0",
+    "lazy.js": "^0.4.2",
+    "lodash": "^4.11.2",
+    "ramda": "^0.19.1",
+    "stackvis": "^0.3.0"
   }
 }
