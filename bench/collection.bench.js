@@ -5,11 +5,16 @@ const benchmark = require('benchmark').Suite
 const fp = require('../dist/fp')
 const lodash = require('lodash/core')
 const lazy = require('lazy.js')
+const t = require('transducers-js')
 
 const array = []
 const object = {}
 const length = 10000
-for (let index = 0; index < length; index++) array[index] = object[String.fromCharCode(index + 65)] = index
+for (let index = 0; index < length; index++) {
+	 array[index] = index
+	if (index < 100)
+		object[String.fromCharCode(index + 65)] = index
+}
 const string = array.join('')
 
 const id = (a) => a
@@ -25,33 +30,112 @@ const slice = Function.call.bind(Array.prototype.slice)
 const type = Function.call.bind(Object.prototype.toString)
 const inspect = (object, limit) => {
 	if (null == object)
-		return type(object)
+		return type(object).slice(0, limit)
 	if (typeof object !== 'object')
 		return object.toString().slice(0, limit)
 	const properties = []
 	let index = -1
 	for (let property in object)
 		(!limit || ++index < limit) && properties.push(`${property}:${object[property]}`)
-	return properties.join(', ')
+	return properties.join(', ').slice(0, limit)
 }
+
+function typeOf (a) {
+	const b = typeof a
+	if ('object' === b) {
+		if (!a)
+			return 'null'
+		if (a instanceof Array)
+			return 'array'
+		if (a instanceof Object)
+			return b
+		const c = Object.prototype.toString.call(a)
+		if ('[object Window]' === c)
+			return 'object'
+		if ('[object Array]' === c || 'number' === typeof a.length && 'undefined' !== typeof a.splice && 'undefined' != typeof a.propertyIsEnumerable && !a.propertyIsEnumerable('splice'))
+			return 'array'
+		if ('[object Function]' === c || 'undefined' !== typeof a.call && 'undefined' !== typeof a.propertyIsEnumerable && !a.propertyIsEnumerable('call'))
+			return 'function'
+	} else if ('function' === b && 'undefined' === typeof a.call)
+		return 'object'
+	return b
+}
+
+function isObject (a) { return 'object' === typeOf(a) }
+function predicateEntry (predicate) { return (entry) => predicate(entry[1], entry[0]) }
+function mapEntry (mapper) { return (entry) => (entry[1] = mapper(entry[1], entry[0]), entry) }
+function entryValue (entry) { return entry[1] }
+function EntryValue (transformer) {
+  this.transformer = transformer
+}
+EntryValue.of = (transformer) => new EntryValue(transformer)
+EntryValue.prototype["@@transducer/init"] = function init () {
+  return this.transformer["@@transducer/init"]()
+}
+EntryValue.prototype["@@transducer/result"] = function result (accumulator) {
+  return this.transformer["@@transducer/result"](accumulator)
+}
+EntryValue.prototype["@@transducer/step"] = function step (accumulator, entry) {
+  return this.transformer["@@transducer/step"](accumulator, entry[1])
+}
+
+function push (array, item) { return array.push(item), array }
+let i = 0
+function compose () {
+	switch (arguments.length) {
+		case 0:
+			return id
+		case 1:
+			return arguments[0]
+		default:
+			return t.comp.apply(null, arguments)
+	}
+}
+
+function Transduce (input) {
+	this.input = input
+	this.steps = []
+}
+Transduce.from = (input) => new Transduce(input)
+Transduce.prototype = {
+	map (mapper) {
+		this.steps.push(t.map(isObject(this.input) ? mapEntry(mapper) : mapper))
+		return this
+	}
+	, filter (predicate) {
+		this.steps.push(t.filter(isObject(this.input) ? predicateEntry(predicate) : predicate))
+		return this
+	}
+	, reduce (reducer, accumulator) {
+		return t.reduce(t.toFn(compose.apply(null, isObject(this.input) ? this.steps.concat(EntryValue.of) : this.steps), reducer), accumulator, this.input)
+	}
+	, slice (start, end) {
+		start && this.steps.push(t.drop(start))
+		end && this.steps.push(t.take(end - start))
+		return this
+	}
+	, value () {
+		return this.reduce(push, [])
+	}
+}
+
+
+
 
 const bench = (runner, value) => {
 	const expected = runner.naive(value)
 	let result
-	new benchmark()
-		//.add('naive', () => runner.naive(value))
+	return new benchmark({ maxTime: 1, minSamples: 2 })
+		.add('naive', () => runner.naive(value))
 		.add('fp', runner(fp, value))
 		.add('lodash', runner(lodash, value))
-		.add('lazy', runner(lazy, value))
-		.on('cycle', (event) => console.log(fp.equals(result = event.target.fn(), expected) ? '✓' : '✗', String(event.target), inspect(result, 10)))
-		.on('complete', function () { console.log('\n', runner.name, type(value).slice(8, 11), 'Fastest is', this.filter('fastest').map('name'), '\n') })
-		.run({ maxTime: 1, minSamples: 2 })
+		.add('transduce', runner(Transduce.from, value))
+		.add('lazy', function () { try { return runner(lazy, value).call() } catch (error) { return String(this.error = error) } })
+		.on('start', () => console.log(runner.name, type(value).slice(8, 11)))
+		.on('cycle', (event) => console.log(fp.equals(result = event.target.fn(), expected) ? '✓' : '✗', String(event.target), inspect(result, 50)))
+		.on('complete', function () { console.log('Fastest is', this.filter('successful').filter('fastest').map('name'), '\n') })
+		.run({ 'async': true })
 }
-
-function mapFilterMapReduce (wrapper, value) {
-	return function runbench () { return wrapper(value).map(inc).filter(odd).map(inc).reduce(sum, 0) }
-}
-mapFilterMapReduce.naive = (value) => reduce(map(filter(map(value, inc), odd), inc), sum, 0)
 
 function instanceValue (wrapper, value) {
 	return function runbench () { return wrapper(value).value() }
@@ -84,26 +168,41 @@ function reduceSum (wrapper, value) {
 reduceSum.naive = (value) => reduce(value, sum, 0)
 
 function filterSliceValue (wrapper, value) {
-	return function runbench () { return wrapper(value).filter(odd).slice(-3, -1).value() }
+	return function runbench () { return wrapper(value).filter(odd).slice(1, 3).value() }
 }
-filterSliceValue.naive = (value) => slice(filter(value, odd), -3, -1)
+filterSliceValue.naive = (value) => slice(filter(value, odd), 1, 3)
 
-Array(
-	// instanceValue,
-	mapValue
-	, mapMapValue
-	, filterValue
+function mapFilterMapReduce (wrapper, value) {
+	return function runbench () { return wrapper(value).map(inc).filter(odd).map(inc).value() }
+}
+mapFilterMapReduce.naive = (value) => reduce(map(filter(map(value, inc), odd), inc), sum, 0)
+
+return [
+	// instanceValue
+	, mapValue
+	, 
+	mapMapValue
+	, 
+	filterValue
 	, filterFilterValue
 	, reduceSum
-	, mapFilterMapReduce
-	// , filterSliceValue
-).forEach((test) => {
-	bench(test, array)
-	bench(test, object)
-	bench(test, string)
-})
+	, 
+	filterSliceValue
+	, 
+	mapFilterMapReduce
+].reduce((run, test) => {
+	const benchWith = (value) => () => new Promise((resolve) => bench(test, value).on('complete', resolve).on('error', resolve))
+	// const benchWith = (value) => () => new Promise((resolve) => resolve(
+	// 	test(fp, value).call(),
+	// 	//test(lodash, value).call(),
+	// 	test(lazy, value).call())
+	// )
+	return Promise.resolve(run)
+		.then(benchWith(array))
+		.then(benchWith(object))
+		.then(benchWith(string))
+}, null)
 
-return
 
 function* fibonacci () {
 	let a = 0

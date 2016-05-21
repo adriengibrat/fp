@@ -32,7 +32,7 @@
     "check": "check-dependencies --verbose",
     "perf": "npm run perf:init && npm run perf:collection",
     "perf:init": "grep 1 /proc/sys/kernel/kptr_restrict > /dev/null && sudo sh -c 'echo 0 > /proc/sys/kernel/kptr_restrict && echo 1 > /proc/sys/kernel/perf_event_paranoid' || echo 'perf init already done'",
-    "perf:collection:record": "perf record -i -g -q -e cycles:u -- node --perf-basic-prof bench/collection.bench.js && npm run perf:script",
+    "perf:collection:record": "perf record -i -g -q -e cycles:u -- node --perf-basic-prof src/collection.bench.js && npm run perf:script",
     "perf:script": "LANG=C perf script | egrep -v ' __libc_start| LazyCompile | v8::internal::| Builtin:| Stub:| LoadIC:|\\[unknown\\]| LoadPolymorphicIC:' | stackcollapse-perf 2>/dev/null | grep runbench | sed 's/LazyCompile:[*~]\\?//g;s/node`//g;s|'$PWD'/||g;s/^.*runbench//' > perf/script.collapsed.txt",
     "perf:collection:flamegraph": "stackvis collapsed < perf/script.collapsed.txt > perf/collection.flamegraph.html",
     "perf:collection": "npm run perf:collection:record && npm run perf:collection:flamegraph",
@@ -66,6 +66,8 @@
     "lazy.js": "^0.4.2",
     "lodash": "^4.11.2",
     "ramda": "^0.19.1",
-    "stackvis": "^0.3.0"
+    "stackvis": "^0.3.0",
+    "transducers-js": "^0.4.174",
+    "transducers.js": "^0.3.2"
   }
 }

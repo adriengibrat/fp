@@ -13,13 +13,13 @@ import arity from 'arity'
 import not from 'not'
 import * as functions from 'functions'
 
-import collection, {filter} from './collection'
+import collection, {filters} from './collection'
 
 export default assign(
 	collection
 	, {
 		version
-		, filter
+		, f: filters
 		, placeholder
 		, doc
 		, partial, curry, compose, arity, not

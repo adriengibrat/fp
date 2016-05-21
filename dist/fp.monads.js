@@ -73,6 +73,32 @@
 		}
 	}
 
+	/* global Object: false */
+
+	function arrayConcat (a, b, placeholder) {
+		var aLength = a.length
+		var bLength = b.length
+		var array = Array() // cannot guess final length, because of placeholders
+
+		for (var i = 0, j = 0; i < aLength || j < bLength; i++)
+			array[i] = i >= aLength || a[i] === placeholder ? b[j++] : a[i]
+
+		return array
+	}
+
+	function getLength (list, max, placeholder) {
+		var length = 0
+		var index = list.length
+		index > max && (index = max)
+
+		while (index--)
+			list[index] !== placeholder && length++
+
+		return length
+	}
+
+	/* global Error: false */
+
 	function setArity (arity, fn) {
 		arity >= 0 || (arity = 0)
 		switch (arity) {
@@ -121,6 +147,8 @@
 		}
 	}
 
+	/* global Array: false */
+
 	function toArray (list, length) {
 		if ( length === void 0 ) length = list.length;
 
@@ -128,28 +156,6 @@
 
 		while (length--)
 			array[length] = list[length]
-
-		return array
-	}
-
-	function getLength (list, max, placeholder) {
-		var length = 0
-		var index = list.length
-		index > max && (index = max)
-
-		while (index--)
-			list[index] !== placeholder && length++
-
-		return length
-	}
-
-	function arrayConcat (a, b, placeholder) {
-		var aLength = a.length
-		var bLength = b.length
-		var array = Array() // cannot guess final length, because of placeholders
-
-		for (var i = 0, j = 0; i < aLength || j < bLength; i++)
-			array[i] = i >= aLength || a[i] === placeholder ? b[j++] : a[i]
 
 		return array
 	}
@@ -497,16 +503,16 @@
 
 	/* global Function: false, Array: false */
 
-	var slice = Function.call.bind(Array.prototype.slice)
+	var slice = Array.prototype.slice
 
-	function _apply (container, apply) { return apply.ap(container) }
+	function ap (container, apply) { return apply.ap(container) }
 
 	var index_monads = assign(fp || {}, monads, {
 		chain: curry.debug(function chain (fn, monad) { return monad.chain(fn) })
 		, either: curry.debug(either)
 		, join: function join (comonad) { return comonad.join() }
 		, lift: curry.debug(function lift (fn, apply) {
-			return slice(arguments, 2).reduce(_apply, map(fn, apply))
+			return slice.call(arguments, 2).reduce(ap, map(fn, apply))
 		})
 	})
 

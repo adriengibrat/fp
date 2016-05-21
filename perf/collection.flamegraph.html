@@ -9439,215 +9439,100 @@ d3.time.scale.utc = function() {
         svRawData = {
 	"": {
 		"svUnique": 0,
-		"svTotal": 52,
+		"svTotal": 49,
 		"svChildren": {
-			"_fp bench/collection.bench.js:21": {
-				"svUnique": 5,
-				"svTotal": 13,
+			" src/transducer.js:170": {
+				"svUnique": 1,
+				"svTotal": 49,
 				"svChildren": {
-					"Collection.from dist/fp.js:766": {
+					"Reduced.of.into src/transducer.js:160": {
 						"svUnique": 1,
-						"svTotal": 1,
-						"svChildren": {}
-					},
-					"filter dist/fp.js:522": {
-						"svUnique": 1,
-						"svTotal": 1,
-						"svChildren": {}
-					},
-					"reduce dist/fp.js:549": {
-						"svUnique": 1,
-						"svTotal": 6,
+						"svTotal": 48,
 						"svChildren": {
-							"forEach dist/fp.js:718": {
-								"svUnique": 1,
-								"svTotal": 5,
+							"Reduced.of.transduce src/transducer.js:119": {
+								"svUnique": 2,
+								"svTotal": 47,
 								"svChildren": {
-									"forEach dist/fp.js:650": {
-										"svUnique": 0,
-										"svTotal": 4,
+									" src/transducer.js:56": {
+										"svUnique": 2,
+										"svTotal": 5,
 										"svChildren": {
-											"forEach dist/fp.js:718": {
+											" src/transducer.js:25": {
 												"svUnique": 1,
-												"svTotal": 4,
+												"svTotal": 1,
+												"svChildren": {}
+											},
+											" src/transducer.js:36": {
+												"svUnique": 0,
+												"svTotal": 2,
 												"svChildren": {
-													"forEach dist/fp.js:589": {
-														"svUnique": 1,
-														"svTotal": 3,
-														"svChildren": {
-															"mappedIteratee dist/fp.js:720": {
-																"svUnique": 2,
-																"svTotal": 2,
-																"svChildren": {}
-															}
-														}
+													"Filter src/transducer.js:37": {
+														"svUnique": 2,
+														"svTotal": 2,
+														"svChildren": {}
 													}
 												}
 											}
 										}
-									}
-								}
-							}
-						}
-					}
-				}
-			},
-			"_lazy bench/collection.bench.js:23": {
-				"svUnique": 5,
-				"svTotal": 15,
-				"svChildren": {
-					"Lazy node_modules/lazy.js/lazy.js:101": {
-						"svUnique": 1,
-						"svTotal": 1,
-						"svChildren": {}
-					},
-					"map node_modules/lazy.js/lazy.js:3236": {
-						"svUnique": 2,
-						"svTotal": 2,
-						"svChildren": {}
-					},
-					"map node_modules/lazy.js/lazy.js:620": {
-						"svUnique": 1,
-						"svTotal": 1,
-						"svChildren": {}
-					},
-					"reduce node_modules/lazy.js/lazy.js:2192": {
-						"svUnique": 1,
-						"svTotal": 6,
-						"svChildren": {
-							"each node_modules/lazy.js/lazy.js:642": {
-								"svUnique": 2,
-								"svTotal": 5,
-								"svChildren": {
-									"each node_modules/lazy.js/lazy.js:2958": {
+									},
+									"Reduced.of.reduce src/transducer.js:116": {
 										"svUnique": 2,
-										"svTotal": 3,
+										"svTotal": 40,
 										"svChildren": {
-											" node_modules/lazy.js/lazy.js:644": {
+											"Reduced.of.Filter.@@transducer/step src/transducer.js:43": {
 												"svUnique": 1,
 												"svTotal": 1,
 												"svChildren": {}
-											}
-										}
-									}
-								}
-							}
-						}
-					}
-				}
-			},
-			"_lodash bench/collection.bench.js:22": {
-				"svUnique": 2,
-				"svTotal": 24,
-				"svChildren": {
-					"lodash node_modules/lodash/core.js:424": {
-						"svUnique": 1,
-						"svTotal": 1,
-						"svChildren": {}
-					},
-					"object.": {
-						"svUnique": 2,
-						"svTotal": 21,
-						"svChildren": {
-							"copyArray node_modules/lodash/core.js:951": {
-								"svUnique": 2,
-								"svTotal": 2,
-								"svChildren": {}
-							},
-							"free@plt": {
-								"svUnique": 1,
-								"svTotal": 1,
-								"svChildren": {}
-							},
-							"lodash node_modules/lodash/core.js:424": {
-								"svUnique": 0,
-								"svTotal": 1,
-								"svChildren": {
-									"LodashWrapper node_modules/lodash/core.js:437": {
-										"svUnique": 1,
-										"svTotal": 1,
-										"svChildren": {}
-									}
-								}
-							},
-							"wrapperValue node_modules/lodash/core.js:1787": {
-								"svUnique": 1,
-								"svTotal": 15,
-								"svChildren": {
-									"baseWrapperValue node_modules/lodash/core.js:984": {
-										"svUnique": 1,
-										"svTotal": 14,
-										"svChildren": {
-											"reduce node_modules/lodash/core.js:2033": {
-												"svUnique": 2,
-												"svTotal": 13,
+											},
+											"Reduced.of.arrayReduce src/transducer.js:63": {
+												"svUnique": 9,
+												"svTotal": 36,
 												"svChildren": {
-													"baseReduce node_modules/lodash/core.js:170": {
-														"svUnique": 0,
-														"svTotal": 11,
+													"Reduced.of.Filter.@@transducer/step src/transducer.js:43": {
+														"svUnique": 3,
+														"svTotal": 25,
 														"svChildren": {
-															" node_modules/lodash/core.js:1094": {
+															"Reduced.of.Filter.@@transducer/step src/transducer.js:43": {
 																"svUnique": 1,
-																"svTotal": 11,
+																"svTotal": 1,
+																"svChildren": {}
+															},
+															"Reduced.of.Map.@@transducer/step src/transducer.js:32": {
+																"svUnique": 1,
+																"svTotal": 21,
 																"svChildren": {
-																	" node_modules/lodash/core.js:171": {
-																		"svUnique": 1,
-																		"svTotal": 10,
+																	"Reduced.of.Filter.@@transducer/step src/transducer.js:43": {
+																		"svUnique": 15,
+																		"svTotal": 20,
 																		"svChildren": {
-																			" node_modules/lodash/core.js:986": {
-																				"svUnique": 3,
-																				"svTotal": 9,
+																			"Reduced.of.pushReducer src/transducer.js:122": {
+																				"svUnique": 1,
+																				"svTotal": 1,
+																				"svChildren": {}
+																			},
+																			"_Znwm@plt": {
+																				"svUnique": 1,
+																				"svTotal": 1,
+																				"svChildren": {}
+																			},
+																			"__clock_gettime": {
+																				"svUnique": 1,
+																				"svTotal": 1,
+																				"svChildren": {}
+																			},
+																			"free": {
+																				"svUnique": 1,
+																				"svTotal": 1,
+																				"svChildren": {}
+																			},
+																			"v8::base::OS::FPrint": {
+																				"svUnique": 0,
+																				"svTotal": 1,
 																				"svChildren": {
-																					"filter node_modules/lodash/core.js:1871": {
-																						"svUnique": 0,
-																						"svTotal": 3,
-																						"svChildren": {
-																							"baseFilter node_modules/lodash/core.js:578": {
-																								"svUnique": 0,
-																								"svTotal": 3,
-																								"svChildren": {
-																									" node_modules/lodash/core.js:1094": {
-																										"svUnique": 1,
-																										"svTotal": 3,
-																										"svChildren": {
-																											" node_modules/lodash/core.js:580": {
-																												"svUnique": 1,
-																												"svTotal": 1,
-																												"svChildren": {}
-																											},
-																											"isArrayLike node_modules/lodash/core.js:2561": {
-																												"svUnique": 0,
-																												"svTotal": 1,
-																												"svChildren": {
-																													" node_modules/lodash/core.js:908": {
-																														"svUnique": 1,
-																														"svTotal": 1,
-																														"svChildren": {}
-																													}
-																												}
-																											}
-																										}
-																									}
-																								}
-																							}
-																						}
-																					},
-																					"map node_modules/lodash/core.js:1992": {
+																					"strchrnul": {
 																						"svUnique": 1,
-																						"svTotal": 3,
-																						"svChildren": {
-																							"baseMap node_modules/lodash/core.js:844": {
-																								"svUnique": 1,
-																								"svTotal": 2,
-																								"svChildren": {
-																									" node_modules/lodash/core.js:1094": {
-																										"svUnique": 1,
-																										"svTotal": 1,
-																										"svChildren": {}
-																									}
-																								}
-																							}
-																						}
+																						"svTotal": 1,
+																						"svChildren": {}
 																					}
 																				}
 																			}
@@ -9656,8 +9541,41 @@ d3.time.scale.utc = function() {
 																}
 															}
 														}
+													},
+													"Reduced.of.result src/transducer.js:23": {
+														"svUnique": 0,
+														"svTotal": 1,
+														"svChildren": {
+															"Reduced.of.result src/transducer.js:23": {
+																"svUnique": 0,
+																"svTotal": 1,
+																"svChildren": {
+																	"Reduced.of.result src/transducer.js:23": {
+																		"svUnique": 1,
+																		"svTotal": 1,
+																		"svChildren": {}
+																	}
+																}
+															}
+														}
+													},
+													"v8::base::OS::FPrint": {
+														"svUnique": 0,
+														"svTotal": 1,
+														"svChildren": {
+															"strchrnul": {
+																"svUnique": 1,
+																"svTotal": 1,
+																"svChildren": {}
+															}
+														}
 													}
 												}
+											},
+											"malloc@plt": {
+												"svUnique": 1,
+												"svTotal": 1,
+												"svChildren": {}
 											}
 										}
 									}

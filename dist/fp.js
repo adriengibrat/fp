@@ -264,6 +264,32 @@
 		}
 	}
 
+	/* global Object: false */
+
+	function arrayConcat (a, b, placeholder) {
+		var aLength = a.length
+		var bLength = b.length
+		var array = Array() // cannot guess final length, because of placeholders
+
+		for (var i = 0, j = 0; i < aLength || j < bLength; i++)
+			array[i] = i >= aLength || a[i] === placeholder ? b[j++] : a[i]
+
+		return array
+	}
+
+	function getLength (list, max, placeholder) {
+		var length = 0
+		var index = list.length
+		index > max && (index = max)
+
+		while (index--)
+			list[index] !== placeholder && length++
+
+		return length
+	}
+
+	/* global Error: false */
+
 	function setArity (arity, fn) {
 		arity >= 0 || (arity = 0)
 		switch (arity) {
@@ -312,35 +338,15 @@
 		}
 	}
 
+	/* global Array: false */
+
 	function toArray (list, length) {
 		if ( length === void 0 ) length = list.length;
 
 		var array = Array(length)
 
-		while (length--)
-			array[length] = list[length]
-
-		return array
-	}
-
-	function getLength (list, max, placeholder) {
-		var length = 0
-		var index = list.length
-		index > max && (index = max)
-
-		while (index--)
-			list[index] !== placeholder && length++
-
-		return length
-	}
-
-	function arrayConcat (a, b, placeholder) {
-		var aLength = a.length
-		var bLength = b.length
-		var array = Array() // cannot guess final length, because of placeholders
-
-		for (var i = 0, j = 0; i < aLength || j < bLength; i++)
-			array[i] = i >= aLength || a[i] === placeholder ? b[j++] : a[i]
+		for (;length;)
+			array[--length] = list[length]
 
 		return array
 	}
@@ -495,7 +501,7 @@
 		constant: constant
 	});
 
-	var filter = {
+	var filters = {
 		contains: function (b) { return function (a) { return String.prototype.indexOf.call(a, b) > -1; }; }
 		, in:     function (b) { return function (a) { return String.prototype.indexOf.call(b, a) > -1; }; }
 		, eq:     function (b) { return function (a) { return a === b; }; }
@@ -509,10 +515,10 @@
 	}
 
 	var assignKey = function (object, value, key) { return (object[key] = value, object); }
-	// const pushValue = (array, value) => (array.push(value), array)
+	var pushValue = function (array, value) { return (array.push(value), array); }
 
 	function first () { return  true }
-
+	function tupple (value, index) { return [index, value] }
 	var callback = function (x) {
 		switch (typeof x) {
 			case 'function':
@@ -534,33 +540,35 @@
 	}
 
 	Collection.prototype = {
-		// constructor: Collection,
-		filter: function filter$1 (predicate) { return new FilteredCollection(this, predicate) }
+		filter: function filter (predicate) { return new FilteredCollection(this, predicate) }
 		, unique: function unique () {
 			var unique = []
 			return this.filter(function (value) { return unique.indexOf(value) < 0 && unique.push(value); }) // TODO indexOf perf
 		}
 		, map: function map (mapper) { return new MappedCollection(this, mapper) }
+		, entries: function entries() { return this.map(tupple) }
 		, slice: function slice (start, end) {
-			var length = this.hasOwnProperty('length') && this.length
+			end === undefined && hasOwnProperty(this, 'length') && (end = this.length)
 			if (start < 0 || end < 0) {
-				if (false === length) 
-					//throw new Error('negative slice offset not supported')
+				if (!('length' in this))
 					return Collection.from(this.valueOf()).slice(start, end)
-				start < 0 && (start += length)
-				end < 0 && (end += length)
+				start < 0 && (start += this.length)
+				end  = end < 0 ? (end + this.length) : end || this.length
 			}
-			return new SlicedCollection(this, start || 0, end || length)
+			return new SlicedCollection(this, start || 0, end)
 		}
 		, find: function find (predicate) {
-			var found = null
+			var found
 			this.forEach(function lookup (value, key) {
 				if (predicate(value, key))
 					return found = value, false
 			})
 			return found
 		}
-		, some: function some (predicate) { return this.find(predicate) !== null }
+		, some: function some (predicate) {
+			this.forEach(function (value, key) { return predicate(value, key) ? (predicate = false) : null; })
+			return !predicate
+		}
 		, every: function every (predicate) { return !this.some(function not (value, key) { return !predicate(value, key) }) }
 		, reduce: function reduce (reducer, accumulator) {
 			if (arguments.length < 2)
@@ -571,11 +579,11 @@
 		// , concat () {
 		// 	return new ConcatenatedCollection(this, arguments)
 		// }
-		, toArray: function toArray () { return this.reduce(assignKey, this.hasOwnProperty('length') ? new Array(this.length) : []) }
+		, toArray: function toArray () { return this.reduce(pushValue, hasOwnProperty(this, 'length') ? new Array(this.length) : []) }
 		, toString: function toString () { return this.toArray().join('') }
 		, toObject: function toObject () { return this.reduce(assignKey, {}) }
 		, toJSON: function toJSON () { return this.valueOf() }
-		, value: function value () { return this.valueOf() } // lodash compatibility
+		, value: function value () { return this.toArray() } // lodash compatibility
 		, valueOf: function valueOf () {
 			var source = this.source
 			while (source.valueOf === Collection.prototype.valueOf)
@@ -585,13 +593,11 @@
 	}
 
 	function IndexedCollection (index) {
-		this.source = index
-		// Collection.call(this, index)
+		Collection.call(this, index)
 		this.length = index.length
 	}
 
 	IndexedCollection.prototype = Object.create(Collection.prototype, {
-		// constructor: { value: IndexedCollection },
 		valueOf: { value: function valueOf () { return this.source } }
 		, forEach: { value: function forEach (iteratee) {
 			var index = -1
@@ -602,41 +608,36 @@
 					break
 			return this
 		} }
+		, has: { value: function has (index) { return hasOwnProperty(this.source, index) } }
+		, get: { value: function get (index) { return this.source[index] } }
 		// optimization
 		, filter: { value: function filter (predicate) { return new FilteredIndexCollection(this, predicate) } }
 	})
 
 	function ArrayCollection (array) {
-		this.source = array
-		this.length = array.length
-		// IndexedCollection.call(this, array)
+		IndexedCollection.call(this, array)
 	}
 
 	ArrayCollection.prototype = Object.create(IndexedCollection.prototype, {
-		// constructor: { value: ArrayCollection }, 
 		valueOf: { value: function valueOf () { return this.toArray() } }
 		, toArray: { value: function toArray () { return this.source } }
 	})
 
 	function StringCollection (string) {
-		this.source = string
-		this.length = string.length
-		// IndexedCollection.call(this, string)
+		IndexedCollection.call(this, string)
 	}
 
 	StringCollection.prototype = Object.create(IndexedCollection.prototype, {
-		// constructor: { value: StringCollection }, 
 		valueOf: { value: function valueOf () { return this.toString() } }
 		, toString: { value: function toString () { return this.source } }
+		, get: { value: function get (index) { return this.source.charAt(index) } }
 	})
 
 	function ObjectCollection (object) {
-		this.source = object
-		// Collection.call(this, object)
+		Collection.call(this, object)
 	}
 
 	ObjectCollection.prototype = Object.create(Collection.prototype, {
-		// constructor: { value: ObjectCollection }, 
 		valueOf: { value: function valueOf () { return this.toObject() } }
 		, toObject: { value: function toObject () { return this.source } }
 		, forEach: { value: function forEach (iteratee) {
@@ -646,24 +647,23 @@
 					break
 			return this
 		} }
-		, filter: { value: function filter (predicate) { return new FilteredKeyCollection(this, predicate) } }
+		, has: { value: IndexedCollection.prototype.has }
+		, get: { value: IndexedCollection.prototype.get }
 		, length: { get: function length () { return this._length || (this._length = Object.keys(this.source).length) } }
 	})
 
 	function FilteredCollection (collection, predicate) {
-		this.source = collection
-		// Collection.call(this, collection)
+		Collection.call(this, collection)
 		this.predicate = callback(predicate)
 	}
 
 	FilteredCollection.prototype = Object.create(Collection.prototype, {
-		// constructor: { value: FilteredCollection }, 
 		forEach: { value: function forEach (iteratee) {
 			var predicate = this.predicate
 			var filteredIndex = -1
 			this.source.forEach(function filteredIteratee (value, index) {
 				if (predicate(value, index))
-					return iteratee(value, ++filteredIndex)
+					return iteratee(value, typeof index === 'number' ? ++filteredIndex : index)
 			})
 			return this
 		} }
@@ -674,20 +674,20 @@
 				return parentPredicate(value, index) && predicate(value, index)
 			})
 		} }
-		, length: { get: function length () {
-			return this.toArray().length
+		, has:  { value: function has (index) { return this.source.has(index) && this.predicate(this.source.get(index), index) } }
+		, get: { value: function get (index) {
+			var value = this.source.get(index)
+			return this.predicate(value, index) ? value : undefined
 		} }
+		, length: { get: function length () { return this.toArray().length } }
 	})
 
 	// optimization 
 	function FilteredIndexCollection (collection, predicate) {
-		this.source = collection
-		this.predicate = callback(predicate)
-		// FilteredCollection.call(this, collection, predicate)
+		FilteredCollection.call(this, collection, predicate)
 	}
 
 	FilteredIndexCollection.prototype = Object.create(FilteredCollection.prototype, {
-		// constructor: { value: FilteredIndexCollection }, 
 		forEach: { value: function forEach (iteratee) {
 			var source = this.source.source
 			var predicate = this.predicate
@@ -702,35 +702,18 @@
 			}
 			return this
 		} }
-	})
-
-	function FilteredKeyCollection (collection, predicate) {
-		this.source = collection
-		this.predicate = callback(predicate)
-		// FilteredCollection.call(this, collection, predicate)
-	}
-
-	FilteredKeyCollection.prototype = Object.create(FilteredCollection.prototype, {
-		// constructor: { value: FilteredKeyCollection }, 
-		forEach: { value: function forEach (iteratee) {
-			var predicate = this.predicate
-			this.source.forEach(function filteredKeyIteratee (value, key) {
-				if (predicate(value, key))
-					return iteratee(value, key)
-			})
-			return this
-		} }
+		// , get: { value: function get (index) {
+		// 	const value = this.source[index]
+		// 	return this.predicate(value, index) ? value : undefined
+		// } }
 	})
 
 	function MappedCollection (collection, mapper) {
-		this.source = collection
-		// Collection.call(this, collection)
-		collection.hasOwnProperty('length') && (this.length = collection.length)
+		Collection.call(this, collection)
 		this.mapper = callback(mapper)
 	}
 
 	MappedCollection.prototype = Object.create(Collection.prototype, {
-		// constructor: { value: MappedCollection },
 		forEach: { value: function forEach (iteratee) {
 			var mapper = this.mapper
 			this.source.forEach(function mappedIteratee (value, index) {
@@ -745,27 +728,37 @@
 				return mapper(parentMapper(value, index), index)
 			})
 		} }
+		, has: { value: function has (index) { return this.source.has(index) } }
+		, get: { value: function get (index) {
+			if(this.has(index))
+				return this.mapper(this.source.get(index), index)
+		} }
+		, length: { get: function length () { return this.source.length } }
 	})
 
 	function SlicedCollection (collection, start, end) {
-		this.source = collection
-		// Collection.call(this, collection)
+		Collection.call(this, collection)
 		this.start = start
-		this.end = end || Infinity
-		end || (this.length = end > start ? end - start : 0)
+		this.end = end
 	}
 
 	SlicedCollection.prototype = Object.create(Collection.prototype, {
-		// constructor: { value: SizedCollection },
 		forEach: { value: function forEach (iteratee) {
 			var end = this.end
-			var start = this.start
-			var sliceIndex = -1
+			var sliceIndex = -1 - this.start
 			this.source.forEach(function slicedIteratee (value, index) {
-				return index < start ? null : index < end && iteratee(value, ++sliceIndex)
+				if (++sliceIndex < 0)
+					return
+				return sliceIndex < end && iteratee(value, typeof index === 'number' ? sliceIndex : index)
 			})
 			return this
 		} }
+		, has: { value: function has (index) { return 0 <= index && index < this.length && this.source.has(index - this.start) } }
+		, get: { value: function get (index) {
+			if(0 <= index && index < this.length)
+				return this.source.get(index - this.start)
+		} }
+		, length: { get: function length () { return this.end && Math.max(this.end - this.start, 0) } }
 	})
 
 	function getIterator (value) {
@@ -796,7 +789,7 @@
 		collection
 		, {
 			version: version
-			, filter: filter
+			, f: filters
 			, placeholder: placeholder
 			, doc: doc
 			, partial: partial, curry: curry, compose: compose, arity: arity, not: not

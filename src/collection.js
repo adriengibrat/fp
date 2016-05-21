@@ -1,4 +1,6 @@
-export const filter = {
+import hasOwnProperty from 'utils/object/has-own-property'
+
+export const filters = {
 	contains: (b) => (a) => String.prototype.indexOf.call(a, b) > -1
 	, in:     (b) => (a) => String.prototype.indexOf.call(b, a) > -1
 	, eq:     (b) => (a) => a === b
@@ -12,9 +14,11 @@ export const filter = {
 }
 
 const assignKey = (object, value, key) => (object[key] = value, object)
-// const pushValue = (array, value) => (array.push(value), array)
+const pushValue = (array, value) => (array.push(value), array)
 
 function first () { return  true }
+function tupple (value, index) { return [index, value] }
+function byIndex (index) { return (_, i) => index === i }
 
 const callback = (x) => {
 	switch (typeof x) {
@@ -37,33 +41,35 @@ export function Collection (source) {
 }
 
 Collection.prototype = {
-	// constructor: Collection,
 	filter (predicate) { return new FilteredCollection(this, predicate) }
 	, unique () {
 		const unique = []
 		return this.filter((value) => unique.indexOf(value) < 0 && unique.push(value)) // TODO indexOf perf
 	}
 	, map (mapper) { return new MappedCollection(this, mapper) }
+	, entries() { return this.map(tupple) }
 	, slice (start, end) {
-		const length = this.hasOwnProperty('length') && this.length
+		end === undefined && hasOwnProperty(this, 'length') && (end = this.length)
 		if (start < 0 || end < 0) {
-			if (false === length) 
-				//throw new Error('negative slice offset not supported')
+			if (!('length' in this))
 				return Collection.from(this.valueOf()).slice(start, end)
-			start < 0 && (start += length)
-			end < 0 && (end += length)
+			start < 0 && (start += this.length)
+			end  = end < 0 ? (end + this.length) : end || this.length
 		}
-		return new SlicedCollection(this, start || 0, end || length)
+		return new SlicedCollection(this, start || 0, end)
 	}
 	, find (predicate) {
-		let found = null
+		let found
 		this.forEach(function lookup (value, key) {
 			if (predicate(value, key))
 				return found = value, false
 		})
 		return found
 	}
-	, some (predicate) { return this.find(predicate) !== null }
+	, some (predicate) {
+		this.forEach((value, key) => predicate(value, key) ? (predicate = false) : null)
+		return !predicate
+	}
 	, every (predicate) { return !this.some(function not (value, key) { return !predicate(value, key) }) }
 	, reduce (reducer, accumulator) {
 		if (arguments.length < 2)
@@ -74,11 +80,11 @@ Collection.prototype = {
 	// , concat () {
 	// 	return new ConcatenatedCollection(this, arguments)
 	// }
-	, toArray () { return this.reduce(assignKey, this.hasOwnProperty('length') ? new Array(this.length) : []) }
+	, toArray () { return this.reduce(pushValue, hasOwnProperty(this, 'length') ? new Array(this.length) : []) }
 	, toString () { return this.toArray().join('') }
 	, toObject () { return this.reduce(assignKey, {}) }
 	, toJSON () { return this.valueOf() }
-	, value () { return this.valueOf() } // lodash compatibility
+	, value () { return this.toArray() } // lodash compatibility
 	, valueOf () {
 		let source = this.source
 		while (source.valueOf === Collection.prototype.valueOf)
@@ -88,13 +94,11 @@ Collection.prototype = {
 }
 
 function IndexedCollection (index) {
-	this.source = index
-	// Collection.call(this, index)
+	Collection.call(this, index)
 	this.length = index.length
 }
 
 IndexedCollection.prototype = Object.create(Collection.prototype, {
-	// constructor: { value: IndexedCollection },
 	valueOf: { value: function valueOf () { return this.source } }
 	, forEach: { value: function forEach (iteratee) {
 		let index = -1
@@ -105,41 +109,36 @@ IndexedCollection.prototype = Object.create(Collection.prototype, {
 				break
 		return this
 	} }
+	, has: { value: function has (index) { return hasOwnProperty(this.source, index) } }
+	, get: { value: function get (index) { return this.source[index] } }
 	// optimization
 	, filter: { value: function filter (predicate) { return new FilteredIndexCollection(this, predicate) } }
 })
 
 function ArrayCollection (array) {
-	this.source = array
-	this.length = array.length
-	// IndexedCollection.call(this, array)
+	IndexedCollection.call(this, array)
 }
 
 ArrayCollection.prototype = Object.create(IndexedCollection.prototype, {
-	// constructor: { value: ArrayCollection }, 
 	valueOf: { value: function valueOf () { return this.toArray() } }
 	, toArray: { value: function toArray () { return this.source } }
 })
 
 function StringCollection (string) {
-	this.source = string
-	this.length = string.length
-	// IndexedCollection.call(this, string)
+	IndexedCollection.call(this, string)
 }
 
 StringCollection.prototype = Object.create(IndexedCollection.prototype, {
-	// constructor: { value: StringCollection }, 
 	valueOf: { value: function valueOf () { return this.toString() } }
 	, toString: { value: function toString () { return this.source } }
+	, get: { value: function get (index) { return this.source.charAt(index) } }
 })
 
 function ObjectCollection (object) {
-	this.source = object
-	// Collection.call(this, object)
+	Collection.call(this, object)
 }
 
 ObjectCollection.prototype = Object.create(Collection.prototype, {
-	// constructor: { value: ObjectCollection }, 
 	valueOf: { value: function valueOf () { return this.toObject() } }
 	, toObject: { value: function toObject () { return this.source } }
 	, forEach: { value: function forEach (iteratee) {
@@ -149,17 +148,16 @@ ObjectCollection.prototype = Object.create(Collection.prototype, {
 				break
 		return this
 	} }
-	, filter: { value: function filter (predicate) { return new FilteredKeyCollection(this, predicate) } }
+	, has: { value: IndexedCollection.prototype.has }
+	, get: { value: IndexedCollection.prototype.get }
 	, length: { get: function length () { return this._length || (this._length = Object.keys(this.source).length) } }
 })
 
 function IteratorCollection (iterator) {
-	this.source = iterator
-	// Collection.call(this, iterator)
+	Collection.call(this, iterator)
 }
 
 IteratorCollection.prototype = Object.create(Collection.prototype, {
-	// constructor: { value: IteratorCollection }, 
 	valueOf: { value: function valueOf () { return this } }
 	, forEach: { value: function forEach (iteratee) {
 		const iterator = this.source()
@@ -170,22 +168,22 @@ IteratorCollection.prototype = Object.create(Collection.prototype, {
 				break
 		return this
 	} }
+	, has: { value: function has (index) { return this.some(byIndex(index)) } }
+	, get: { value: function get (index) { return this.find(byIndex(index)) } }
 })
 
 function FilteredCollection (collection, predicate) {
-	this.source = collection
-	// Collection.call(this, collection)
+	Collection.call(this, collection)
 	this.predicate = callback(predicate)
 }
 
 FilteredCollection.prototype = Object.create(Collection.prototype, {
-	// constructor: { value: FilteredCollection }, 
 	forEach: { value: function forEach (iteratee) {
 		const predicate = this.predicate
 		let filteredIndex = -1
 		this.source.forEach(function filteredIteratee (value, index) {
 			if (predicate(value, index))
-				return iteratee(value, ++filteredIndex)
+				return iteratee(value, typeof index === 'number' ? ++filteredIndex : index)
 		})
 		return this
 	} }
@@ -196,20 +194,20 @@ FilteredCollection.prototype = Object.create(Collection.prototype, {
 			return parentPredicate(value, index) && predicate(value, index)
 		})
 	} }
-	, length: { get: function length () {
-		return this.toArray().length
+	, has:  { value: function has (index) { return this.source.has(index) && this.predicate(this.source.get(index), index) } }
+	, get: { value: function get (index) {
+		const value = this.source.get(index)
+		return this.predicate(value, index) ? value : undefined
 	} }
+	, length: { get: function length () { return this.toArray().length } }
 })
 
 // optimization 
 function FilteredIndexCollection (collection, predicate) {
-	this.source = collection
-	this.predicate = callback(predicate)
-	// FilteredCollection.call(this, collection, predicate)
+	FilteredCollection.call(this, collection, predicate)
 }
 
 FilteredIndexCollection.prototype = Object.create(FilteredCollection.prototype, {
-	// constructor: { value: FilteredIndexCollection }, 
 	forEach: { value: function forEach (iteratee) {
 		const source = this.source.source
 		const predicate = this.predicate
@@ -224,35 +222,18 @@ FilteredIndexCollection.prototype = Object.create(FilteredCollection.prototype, 
 		}
 		return this
 	} }
-})
-
-function FilteredKeyCollection (collection, predicate) {
-	this.source = collection
-	this.predicate = callback(predicate)
-	// FilteredCollection.call(this, collection, predicate)
-}
-
-FilteredKeyCollection.prototype = Object.create(FilteredCollection.prototype, {
-	// constructor: { value: FilteredKeyCollection }, 
-	forEach: { value: function forEach (iteratee) {
-		const predicate = this.predicate
-		this.source.forEach(function filteredKeyIteratee (value, key) {
-			if (predicate(value, key))
-				return iteratee(value, key)
-		})
-		return this
-	} }
+	// , get: { value: function get (index) {
+	// 	const value = this.source[index]
+	// 	return this.predicate(value, index) ? value : undefined
+	// } }
 })
 
 function MappedCollection (collection, mapper) {
-	this.source = collection
-	// Collection.call(this, collection)
-	collection.hasOwnProperty('length') && (this.length = collection.length)
+	Collection.call(this, collection)
 	this.mapper = callback(mapper)
 }
 
 MappedCollection.prototype = Object.create(Collection.prototype, {
-	// constructor: { value: MappedCollection },
 	forEach: { value: function forEach (iteratee) {
 		const mapper = this.mapper
 		this.source.forEach(function mappedIteratee (value, index) {
@@ -267,27 +248,37 @@ MappedCollection.prototype = Object.create(Collection.prototype, {
 			return mapper(parentMapper(value, index), index)
 		})
 	} }
+	, has: { value: function has (index) { return this.source.has(index) } }
+	, get: { value: function get (index) {
+		if(this.has(index))
+			return this.mapper(this.source.get(index), index)
+	} }
+	, length: { get: function length () { return this.source.length } }
 })
 
 function SlicedCollection (collection, start, end) {
-	this.source = collection
-	// Collection.call(this, collection)
+	Collection.call(this, collection)
 	this.start = start
-	this.end = end || Infinity
-	end || (this.length = end > start ? end - start : 0)
+	this.end = end
 }
 
 SlicedCollection.prototype = Object.create(Collection.prototype, {
-	// constructor: { value: SizedCollection },
 	forEach: { value: function forEach (iteratee) {
 		const end = this.end
-		const start = this.start
-		let sliceIndex = -1
+		let sliceIndex = -1 - this.start
 		this.source.forEach(function slicedIteratee (value, index) {
-			return index < start ? null : index < end && iteratee(value, ++sliceIndex)
+			if (++sliceIndex < 0)
+				return
+			return sliceIndex < end && iteratee(value, typeof index === 'number' ? sliceIndex : index)
 		})
 		return this
 	} }
+	, has: { value: function has (index) { return 0 <= index && index < this.length && this.source.has(index - this.start) } }
+	, get: { value: function get (index) {
+		if(0 <= index && index < this.length)
+			return this.source.get(index - this.start)
+	} }
+	, length: { get: function length () { return this.end && Math.max(this.end - this.start, 0) } }
 })
 
 function getIterator (value) {
