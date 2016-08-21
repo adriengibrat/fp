@@ -6,7 +6,7 @@ module.exports = function (curry, title) {
 		return (a || 0) + (b || 0) + (c || 0) + (arguments[3] || 0) + (this && this.x || 0)
 	}
 
-	var context = {x: 10, curried: curry(fn)}
+	var context = { x: 10, curried: curry(fn) }
 
 	tape(title, function (assert) {
 

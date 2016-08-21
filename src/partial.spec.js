@@ -6,7 +6,7 @@ module.exports = function (partial, title) {
 		return (a || 0) + (b || 0) + (c || 0) + (arguments[3] || 0) + (this && this.x || 0)
 	}
 
-	var context = {x: 10, partial: partial(fn, [2])}
+	var context = { x: 10, partial: partial(fn, [2]) }
 
 	tape(title, function (assert) {
 

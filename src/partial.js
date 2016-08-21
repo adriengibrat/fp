@@ -1,5 +1,5 @@
-import {setArity, arrayConcat, apply, getLength} from 'optims'
-import {signature, targetFn, boundThis, partialArgs, placeholder} from 'symbols'
+import { setArity, arrayConcat, apply, getLength } from 'optims'
+import { signature, targetFn, boundThis, partialArgs, placeholder } from 'symbols'
 
 partial[signature] = partialDebug[signature] = 'partial :: (α1, …, αN → β), ?[α1, …] = [] → (…, αN → β)'
 
@@ -12,7 +12,7 @@ export function partialDebug (fn, args = []) {
 
 	/* attach debug info */
 	const target = fn[targetFn] || fn
-	applied.toString = () => `/* partially applied */${target}`
+	applied.toString = () => `/* partially applied */${ target }`
 	applied[signature] = target[signature]
 	applied[targetFn] = target
 	applied[boundThis] = this

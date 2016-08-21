@@ -1,6 +1,6 @@
-import {setArity, apply, getLength} from 'optims'
-import {signature, targetFn, placeholder} from 'symbols'
-import partial, {partialDebug} from 'partial'
+import { setArity, apply, getLength } from 'optims'
+import { signature, targetFn, placeholder } from 'symbols'
+import partial, { partialDebug } from 'partial'
 
 const curry = curryFactory(partial)
 const curryDebug = curryFactory(partialDebug, debug)
@@ -28,13 +28,13 @@ function curryFactory (partial, wrapper) {
 function debug (curried, fn) {
 	/* attach debug info */
 	const target = fn[targetFn] || fn
-	curried.toString = () => `/* curried */${target}`
+	curried.toString = () => `/* curried */${ target }`
 	curried[signature] = target[signature]
 	curried[targetFn] = target
 
 	return curried
 }
 
-export {curryDebug}
+export { curryDebug }
 
 export default curry

@@ -1,5 +1,5 @@
-import container, {canning} from 'container'
-import {signature} from 'symbols'
+import container, { canning } from 'container'
+import { signature } from 'symbols'
 import Noop from 'monads/noop'
 
 const Left = container({

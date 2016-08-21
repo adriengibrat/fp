@@ -1,5 +1,5 @@
 import Apply from 'interfaces/apply'
-import container, {canning} from 'container'
+import container, { canning } from 'container'
 
 export default container({
 	constructor: function Applicative (value) { return canning(Applicative, value) }

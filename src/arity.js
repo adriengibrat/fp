@@ -1,5 +1,5 @@
-import {setArity, apply} from 'optims'
-import {signature} from 'symbols'
+import { setArity, apply } from 'optims'
+import { signature } from 'symbols'
 
 arity[signature] = 'arity :: (α1, …, αN → β) F, ?Number A = F.length → (α1, …, αA → β)'
 

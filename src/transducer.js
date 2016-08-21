@@ -111,7 +111,7 @@ const reduceOf = (collection) => {
 	if (isObject(collection)) return objectReduce
 	if (isString(collection)) return stringReduce
 	if (isIterable(collection)) return iterableReduce
-	throw new TypeError(`Don't know how to reduce ${type(collection)}`)
+	throw new TypeError(`Don't know how to reduce ${ type(collection) }`)
 }
 const reduce = (transducer, accumulator, collection) => 
 	reduceOf(collection)(transducer, accumulator, collection)
@@ -154,7 +154,7 @@ const transducerFor = (accumulator) => {
 	if (isObject(accumulator)) return objectTransducer
 	if (isString(accumulator)) return stringTransducer
 	if (accumulator && accumulator['@@transducer/step']) return accumulator
-	throw new TypeError(`Don't know how to get transducer for ${type(accumulator)}`)
+	throw new TypeError(`Don't know how to get transducer for ${ type(accumulator) }`)
 }
 
 const into = (accumulator, transformer, collection) => 

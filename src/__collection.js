@@ -26,7 +26,7 @@ const callback = (x) => {
 		case 'undefined':
 			return (item) => item
 		default:
-			throw new Error(`Invalid callback ${x}`)
+			throw new Error(`Invalid callback ${ x }`)
 	}
 }
 

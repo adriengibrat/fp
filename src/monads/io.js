@@ -1,5 +1,5 @@
-import container, {canning} from 'container'
-import {signature} from 'symbols'
+import container, { canning } from 'container'
+import { signature } from 'symbols'
 import Monad from 'interfaces/monad'
 import compose from 'compose'
 

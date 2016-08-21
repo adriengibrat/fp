@@ -1,4 +1,4 @@
-import {signature} from 'symbols'
+import { signature } from 'symbols'
 
 identity[signature] = 'identity :: α → α'
 

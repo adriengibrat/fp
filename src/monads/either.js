@@ -1,4 +1,4 @@
-import {signature} from 'symbols'
+import { signature } from 'symbols'
 import Left from 'monads/either.left'
 import Right from 'monads/either.right'
 
@@ -12,7 +12,7 @@ export default function either (left, right, either) {
 		return left(either.valueOf())
 	if (either instanceof Right)
 		return right(either.valueOf())
-	throw TypeError(`${either} must be instance of Right or Left`)
+	throw TypeError(`${ either } must be instance of Right or Left`)
 }
 
 export { Right, Left }

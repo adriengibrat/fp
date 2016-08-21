@@ -1,4 +1,4 @@
-import {signature} from 'symbols'
+import { signature } from 'symbols'
 
 constant[signature] = 'constant :: α → β → α'
 

@@ -1,4 +1,4 @@
-import container, {canning} from 'container'
+import container, { canning } from 'container'
 
 export default container({
 	constructor: function Functor (value) { return canning(Functor, value) }

@@ -1,5 +1,5 @@
-import {setArity, toArray, arrayConcat, apply} from 'optims'
-import {signature, targetFn, boundThis} from 'symbols'
+import { setArity, toArray, arrayConcat, apply } from 'optims'
+import { signature, targetFn, boundThis } from 'symbols'
 import map from 'utils/map'
 import trace from 'utils/trace'
 
@@ -27,7 +27,7 @@ export function composeDebug () {
 
 	/* attach debug info */
 	const target = last[targetFn] || last
-	composed.toString = () => `/* composed */${target}`
+	composed.toString = () => `/* composed */${ target }`
 	composed[signature] = target[signature]
 	composed[targetFn] = target
 
