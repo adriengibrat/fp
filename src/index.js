@@ -1,4 +1,3 @@
-import { version } from '../package.json'
 import assign from 'utils/object/assign'
 import equals from 'utils/object/_equals'
 import doc from 'utils/doc'
@@ -18,8 +17,7 @@ import collection, {filters} from './collection'
 export default assign(
 	collection
 	, {
-		version
-		, f: filters
+		f: filters
 		, placeholder
 		, doc
 		, partial, curry, compose, arity, not
