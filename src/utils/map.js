@@ -1,5 +1,5 @@
-import hasOwnProperty from 'utils/object/has-own-property'
-import {signature, targetFn} from 'symbols'
+import hasOwnProperty from 'utils/object/hasOwnProperty'
+import { signature, targetFn } from 'symbols'
 
 map[signature] = 'map :: (α, ?Integer, ?List L → β) → [α] L, ?Boolean = L.map !== map → [β]'
 

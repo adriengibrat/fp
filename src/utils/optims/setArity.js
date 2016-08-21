@@ -46,6 +46,6 @@ export default function setArity (arity, fn) {
 				return apply(fn, this, arguments)
 			}
 		default:
-			throw Error(`Arity "${arity}" is not supported`) // wtf arity >= 10
+			throw Error(`Arity "${ arity }" is not supported`) // wtf arity >= 10
 	}
 }

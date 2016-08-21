@@ -1,11 +1,11 @@
-import {signature} from 'symbols'
+import { signature } from 'symbols'
 
 doc[signature] = 'doc :: (* → *) → String'
 
 /* global Object: false */
 
 export default function doc (fn) {
-	return `doc ${fn && (fn[signature] || fn.name) || Object.prototype.toString.call(fn)}`
+	return `doc ${ fn && (fn[signature] || fn.name) || Object.prototype.toString.call(fn) }`
 }
 
 /*
@@ -39,7 +39,7 @@ function _parseArgs (signature) {
 		closeList && deepList--
 
 		if (closeParenthesis && !deepParenthesis) { // parenthesis group
-			parsed = _parseArgs({source})
+			parsed = _parseArgs({ source })
 
 			const named = string.slice(index + 1).match(_namePattern)
 			if (named) {
@@ -51,7 +51,7 @@ function _parseArgs (signature) {
 
 			offset = index + 1
 		} else if (closeList && !deepList) { // list
-			parsed = _parseArgs({source})
+			parsed = _parseArgs({ source })
 
 			parsed.type = 'List'
 			parsed.of = source

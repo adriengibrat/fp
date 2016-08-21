@@ -1,5 +1,5 @@
 // import create from 'utils/object/create'
-// import defineProperties from 'utils/object/define-properties'
+// import defineProperties from 'utils/object/defineProperties'
 
 // See https://github.com/zloirock/core-js#ecmascript-6-symbol
 // See https://github.com/medikoo/es6-symbol
@@ -26,7 +26,7 @@
 // 				// https://github.com/medikoo/es6-symbol/issues/12
 // 				if (ie11BugWorkaround) return
 // 				ie11BugWorkaround = true
-// 				defineProperty(this, name, {value})
+// 				defineProperty(this, name, { value })
 // 				ie11BugWorkaround = false
 // 			}
 // 		})
@@ -38,14 +38,14 @@
 // 	}
 
 // 	const validateSymbol = function (value) {
-// 		if (!isSymbol(value)) throw new TypeError(`${value} is not a symbol`)
+// 		if (!isSymbol(value)) throw new TypeError(`${ value } is not a symbol`)
 // 		return value
 // 	}
 
 // 	function SymbolTweak (description) { return Symbol(description) }
 
 // 	defineProperties(SymbolTweak.prototype, {
-// 		toString: { value: function () { return `Symbol (${validateSymbol(this).__description__})` } },
+// 		toString: { value: function () { return `Symbol (${ validateSymbol(this).__description__ })` } },
 // 		valueOf: { value: function () { return validateSymbol(this) } }
 // 	})
 

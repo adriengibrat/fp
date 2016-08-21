@@ -1,15 +1,15 @@
 import Chain from 'interfaces/chain'
 import Applicative from 'interfaces/applicative'
-import container, {canning} from 'container'
-import setPrototype from 'utils/object/set-prototype'
-import getPrototype from 'utils/object/get-prototype'
+import container, { canning } from 'container'
+import setPrototypeOf from 'utils/object/setPrototypeOf'
+import getPrototypeOf from 'utils/object/getPrototypeOf'
 
 const Monad = container({
 	constructor: function Monad (value) { return canning(Monad, value) },
 	parent: Chain
 })
 
-Monad.prototype = setPrototype(getPrototype(Monad.prototype), Applicative.prototype)
+Monad.prototype = setPrototypeOf(getPrototypeOf(Monad.prototype), Applicative.prototype)
 
 export default Monad
 

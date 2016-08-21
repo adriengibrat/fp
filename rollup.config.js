@@ -11,9 +11,9 @@ const settings = {
 				fp:  'src/index.js'
 				, functions: 'src/functions/index.js'
 				, monads: 'src/monads/index.js'
-				, container: 'src/monads/interfaces/_container.js'
-				, optims: 'src/utils/_optims.js'
-				, symbols: 'src/utils/_symbols.js'
+				, container: 'src/monads/interfaces/container.js'
+				, optims: 'src/utils/optims.js'
+				, symbols: 'src/utils/symbols.js'
 			}
 			, paths: ['src', 'src/monads']
 			, external: []

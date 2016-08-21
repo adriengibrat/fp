@@ -4,7 +4,7 @@ export default function getLength (list, max, placeholder) {
 	index > max && (index = max)
 
 	while (index--)
-		list[index] !== placeholder && length++
+		list[index] !== placeholder && ++length
 
 	return length
 }

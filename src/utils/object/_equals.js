@@ -1,11 +1,11 @@
 import is from 'utils/object/is'
-import getPrototype from 'utils/object/get-prototype'
+import getPrototypeOf from 'utils/object/getPrototypeOf'
 
 /* global Object: false, Array: false */
 
 function getProperties (object) {
 	const properties = []
-	for (; object != null; object = getPrototype(object))
+	for (; object != null; object = getPrototypeOf(object))
 		Array.prototype.push.apply(
 			properties,
 			Object.getOwnPropertyNames(object).concat(Object.getOwnPropertySymbols(object))

@@ -1,4 +1,4 @@
-import hasOwnProperty from 'utils/object/has-own-property'
+import hasOwnProperty from 'utils/object/hasOwnProperty'
 
 export const filters = {
 	contains: (b) => (a) => String.prototype.indexOf.call(a, b) > -1

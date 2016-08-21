@@ -18,7 +18,7 @@ export default Object.setPrototypeOf || function setPrototypeOf (object, prototy
 	if (!isObject(object))
 		throw new TypeError('cannot set prototype on a non-object')
 	if (!(prototype === null || isObject(proto)))
-		throw new TypeError(`can only set prototype to an object or null ${prototype}`)
+		throw new TypeError(`can only set prototype to an object or null ${ prototype }`)
 	_setPrototype.call(object, prototype)
 	return object
 }
