@@ -54,7 +54,7 @@ const toArray = (args) => {
 const compose = function () {
 	const actions = toArray(arguments)
 	return (accumulator) => {
-		for (let index = actions.length - 1; index >= 0; index--)
+		for (let index = actions.length - 1; index >= 0; --index)
 			accumulator = actions[index](accumulator)
 		return accumulator
 	}
@@ -162,7 +162,7 @@ const into = (accumulator, transformer, collection) =>
 
 const length = 1000
 const array = Array(length)
-for (let index = 0; index < length; index++) array[index] = index
+for (let index = 0; index < length; ++index) array[index] = index
 
 const gt2 = (x) => x > 2
 const by2 = (x) => x * 2
