@@ -16,7 +16,7 @@ const type = (x) => x == null ? typeof x : x.constructor ? x.constructor.name : 
 
 const isArray = Array.isArray || ((x) => '[object Array]' === toString.call(x))
 const isObject = (x) => x && x instanceof Object && Object.getPrototypeOf(x) === Object.prototype
-const isString = (x) => 'number' === typeof x
+const isString = (x) => 'string' === typeof x
 const isIterable = (x) => x && 'function' === typeof (x[iterator] || x.next)
 
 const init = function () { return this.transducer['@@transducer/init']() }
