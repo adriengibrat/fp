@@ -2,23 +2,11 @@ fp λ
 ====
 > Readable, debbuggable & fast ES6 Functional Programming
 
-`fp`` offers :
-* `partial`, `curry`, `compose` higher-order functions
-* `map` helper function to simply iterate over any object
-* `Maybe`, `Either` & `IO` basic monads
-* some utilities functions
-
-## Documentation
-`doc` function allow to get Hindley-Milner signature of every `fp` function
-
-```js
-console.log(fp.doc(fp.compose))
-```
-
-[//]: # (## Installing)
-[//]: # (```sh)
-[//]: # (npm install fp)
-[//]: # (```)
+`fp` offers a collection of usefull functions :
+* `compose`, `curry`, `partial` higher-order functions
+* `map` function to iterate over any object
+* `not`, `arity` & `path` helper functions to use with `compose` & `map`
+* `identity`, `constant`, `noop` & other utilities functions
 
 ## Usage
 
@@ -38,9 +26,7 @@ import compose from 'fp/src/compose'
 #### amd
 
 ```js
-define(['fp'], function (fp) {
-	...
-})
+define(['fp'], function (fp) { ... })
 ```
 
 #### commonjs
@@ -65,30 +51,35 @@ npm test
 or run tests for a specific function :
 ```sh
 npm run test:partial
-```
-```sh
 npm run test:curry
-```
-```sh
 npm run test:compose
 ```
+
+## Benchmarks
 
 `curry` function is benchmarked against [Ramda][ramda] and [Lodash][lodash] implementations, to run benchmarks :
 
 ```sh
 npm run bench
 ```
+curried functions are 1.7× faster than [Lodash][lodash] and 7× faster than [Ramda][ramda] ;)
 
-yep, it's about 1.7× faster than [Lodash][lodash] and 7× faster than [Ramda][ramda] ;)
+## Documentation
+
+`doc` function allow to get Hindley-Milner signature of every `fp` function
+
+```js
+console.log(fp.doc(fp.compose))
+```
 
 ## Contribute
 
-Copy, paste & [rollup][]
+Clone & [rollup][]
 
 ```sh
 git clone git@github.com:adriengibrat/fp.git
 cd fp
-npm install # wait for babel install...
+npm install --no-optional # optional dependencies are only used for benchmarks
 npm start # watch `src` directory and bundle `fp.js` on change
 ```
 
