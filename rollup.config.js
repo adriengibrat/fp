@@ -4,12 +4,12 @@ import eslint from 'rollup-plugin-eslint'
 import uglify from 'rollup-plugin-uglify'
 
 const plugins = [ resolve({
-			include: {
-				optims: 'src/utils/optims'
-				, symbols: 'src/utils/symbols'
-			}
-			, paths: ['src']
-		}), eslint(), buble() ]
+	include: {
+		optims: 'src/utils/optims'
+		, symbols: 'src/utils/symbols'
+	}
+	, paths: ['src']
+}), eslint(), buble() ]
 
 if (process.env.build === 'min')
 	plugins.push(uglify())
