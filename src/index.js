@@ -11,13 +11,12 @@ import compose from 'compose'
 import arity from 'arity'
 import not from 'not'
 import * as functions from 'functions'
-
-import collection, {filters} from './collection'
+import * as sequence from 'sequence'
 
 export default assign(
-	collection
+	sequence.sequence
 	, {
-		f: filters
+		filters: sequence.filters
 		, placeholder
 		, doc
 		, partial, curry, compose, arity, not
