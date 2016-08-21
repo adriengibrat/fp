@@ -1,6 +1,6 @@
 import { signature } from 'symbols'
-import Left from 'monads/either.left'
-import Right from 'monads/either.right'
+import Left from 'either.left'
+import Right from 'either.right'
 
 either.Left = Left
 either.Right = Right

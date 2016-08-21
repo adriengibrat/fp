@@ -1,6 +1,6 @@
-/dist/
-/node_modules/
-/npm-debug.log
+dist/
+node_modules/
+npm-debug.log
 /isolate-*-v8.log
 /perf/
 /perf.*

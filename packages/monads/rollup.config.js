@@ -5,10 +5,11 @@ import uglify from 'rollup-plugin-uglify'
 
 const plugins = [ resolve({
 			include: {
-				optims: 'src/utils/optims'
-				, symbols: 'src/utils/symbols'
+				container: 'src/interfaces/container'
+				, optims: 'node_modules/fp/src/utils/optims'
+				, symbols: 'node_modules/fp/src/utils/symbols'
 			}
-			, paths: ['src']
+			, paths: ['src', 'node_modules/fp/src']
 		}), eslint(), buble() ]
 
 if (process.env.build === 'min')

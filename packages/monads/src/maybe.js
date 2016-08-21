@@ -1,8 +1,8 @@
 import container, { canning } from 'container'
 import { signature } from 'symbols'
-import Monad from 'interfaces/monad'
-import Noop from 'monads/noop'
 import values from 'utils/object/values'
+import Monad from 'interfaces/monad'
+import Noop from 'noop'
 
 const Maybe = container({
 	constructor: function Maybe (value) { return value == null ? nothing : Just(value) }
