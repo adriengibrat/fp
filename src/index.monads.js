@@ -4,7 +4,7 @@ import curry from 'curry'
 import * as monads from 'monads'
 import fp from 'fp'
 
-/* global Function: false, Array: false */
+/* global Array: false */
 
 const slice = Array.prototype.slice
 
