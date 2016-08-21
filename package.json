@@ -22,7 +22,8 @@
     "parserOptions": {
       "ecmaVersion": 6,
       "sourceType": "module"
-    }
+    },
+    "extends": "eslint:recommended"
   },
   "scripts": {
     "start": "npm run build && npm run watch:core",

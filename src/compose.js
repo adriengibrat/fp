@@ -1,5 +1,5 @@
 import { setArity, toArray, arrayConcat, apply } from 'optims'
-import { signature, targetFn, boundThis } from 'symbols'
+import { signature, targetFn } from 'symbols'
 import map from 'utils/map'
 import trace from 'utils/trace'
 

@@ -27,7 +27,7 @@ function _parseArgs (signature) {
 		const closeParenthesis = char === ')'
 		const openList = char === '['
 		const closeList = char === ']'
-		const separator = char === '→' || char === ','
+		const separator = char === '→' || char === ','
 		// const optional = char === '?'
 		// const defaultValue = char === '='
 		const end = index === string.length - 1
