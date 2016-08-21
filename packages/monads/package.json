@@ -9,7 +9,7 @@
   "jsnext:main": "src/index.js",
   "repository": {
     "type": "git",
-    "url": "git://github.com/adriengibrat/fp.monads.git"
+    "url": "git://github.com/adriengibrat/fp.git"
   },
   "engines": {
     "npm": ">= 2.0.0"
