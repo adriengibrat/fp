@@ -1,7 +1,8 @@
 {
   "ignore": [
     "bench/**",
-    "packages/**"
+    "packages/**",
+    "rollup.config.js"
   ],
   "test": [
     "/test/**",
