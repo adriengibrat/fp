@@ -1,0 +1,7 @@
+.npmignore
+/bench
+/packages
+*.spec.js
+/test
+/playground.html
+/rollup.config.js
