@@ -14,18 +14,6 @@
   "engines": {
     "npm": ">= 2.0.0"
   },
-  "eslintConfig": {
-    "env": {
-      "node": true,
-      "browser": true,
-      "es6": true
-    },
-    "parserOptions": {
-      "ecmaVersion": 6,
-      "sourceType": "module"
-    },
-    "extends": "eslint:recommended"
-  },
   "scripts": {
     "start": "npm run build:src -- --watch",
     "bench": "npm run bench:curry",

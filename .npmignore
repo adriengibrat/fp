@@ -1,3 +1,5 @@
+.bithoundrc
+.eslintrc
 .npmignore
 /bench
 /packages

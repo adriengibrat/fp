@@ -1,0 +1,10 @@
+{
+  "ignore": [
+    "bench/**",
+    "packages/**"
+  ],
+  "test": [
+    "/test/**",
+    "**/.spec.js"
+  ]
+}
