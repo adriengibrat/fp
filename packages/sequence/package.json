@@ -1,0 +1,56 @@
+{
+  "name": "fp.sequence",
+  "version": "0.0.1",
+  "description": "ES6 Functional Programming transducers",
+  "author": "Adrien Gibrat <adrien.gibrat@gmail.com>",
+  "license": "MIT",
+  "main": "dist/fp.sequence.js",
+  "min:main": "dist/fp.sequence.min.js",
+  "jsnext:main": "src/index.js",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/adriengibrat/fp.git"
+  },
+  "engines": {
+    "npm": ">= 2.0.0"
+  },
+  "eslintConfig": {
+    "env": {
+      "browser": true,
+      "es6": true
+    },
+    "parserOptions": {
+      "ecmaVersion": 6,
+      "sourceType": "module"
+    },
+    "extends": "eslint:recommended"
+  },
+  "scripts": {
+    "start": "npm run build:src -- --watch",
+    "bench": "npm run bench:sequence",
+    "bench:sequence": "node bench/sequence.bench.js",
+    "build": "npm run build:src && npm run build:min",
+    "build:src": "rollup --config",
+    "build:min": "npm run build:src -- --environment build:min --output $npm_package_min_main",
+    "size": "npm run size:src --silent && npm run size:min --silent",
+    "size:format": "wc -c | numfmt --to=iec-i --suffix=B",
+    "size:src": "echo \"$npm_package_name raw size `cat $npm_package_main | npm run size:format`\"",
+    "size:min": "echo \"$npm_package_name minified & gzipped `gzip -9 -c $npm_package_min_main | npm run size:format`\""
+  },
+  "devDependencies": {
+    "rollup": "^0.34.10",
+    "rollup-plugin-buble": "^0.13.0",
+    "rollup-plugin-eslint": "^2.0.2",
+    "rollup-plugin-includepaths": "^0.1.5",
+    "rollup-watch": "^2.5.0",
+    "rollup-plugin-uglify": "^1.0.1",
+    "tape": "^4.6.0"
+  },
+  "optionalDependencies": {
+    "benchmark": "^2.1.1",
+    "lazy.js": "^0.4.2",
+    "lodash": "^4.15.0",
+    "transducers-js": "^0.4.174",
+    "transducers.js": "^0.3.2"
+  }
+}
