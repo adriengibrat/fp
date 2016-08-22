@@ -32,12 +32,6 @@
     "build": "npm run build:src && npm run build:min",
     "build:src": "rollup --config",
     "build:min": "npm run build:src -- --environment build:min --output $npm_package_min_main",
-    "perf": "npm run perf:init && npm run perf:collection",
-    "perf:init": "grep 1 /proc/sys/kernel/kptr_restrict > /dev/null && sudo sh -c 'echo 0 > /proc/sys/kernel/kptr_restrict && echo 1 > /proc/sys/kernel/perf_event_paranoid' || echo 'perf init already done'",
-    "perf:collection:record": "perf record -i -g -q -e cycles:u -- node --perf-basic-prof bench/collection.bench.js && npm run perf:script",
-    "perf:script": "LANG=C perf script | egrep -v ' __libc_start| LazyCompile | v8::internal::| Builtin:| Stub:| LoadIC:|\\[unknown\\]| LoadPolymorphicIC:' | stackcollapse-perf 2>/dev/null | grep runbench | sed 's/LazyCompile:[*~]\\?//g;s/node`//g;s|'$PWD'/||g;s/^.*runbench//' > perf/script.collapsed.txt",
-    "perf:collection:flamegraph": "stackvis collapsed < perf/script.collapsed.txt > perf/collection.flamegraph.html",
-    "perf:collection": "npm run perf:collection:record && npm run perf:collection:flamegraph",
     "size": "npm run size:src --silent && npm run size:min --silent",
     "size:format": "wc -c | numfmt --to=iec-i --suffix=B",
     "size:src": "echo \"$npm_package_name raw size `cat $npm_package_main | npm run size:format`\"",
@@ -48,6 +42,7 @@
     "test:compose": "node test/compose.test.js"
   },
   "devDependencies": {
+    "eslint": "^3.2.2",
     "rollup": "^0.34.10",
     "rollup-plugin-buble": "^0.13.0",
     "rollup-plugin-eslint": "^2.0.2",
@@ -58,12 +53,7 @@
   },
   "optionalDependencies": {
     "benchmark": "^2.1.1",
-    "flamegraph": "^0.7.0",
-    "lazy.js": "^0.4.2",
     "lodash": "^4.15.0",
-    "ramda": "^0.22.1",
-    "stackvis": "^0.3.0",
-    "transducers-js": "^0.4.174",
-    "transducers.js": "^0.3.2"
+    "ramda": "^0.22.1"
   }
 }
