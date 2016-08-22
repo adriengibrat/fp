@@ -10,17 +10,10 @@ import curry from 'curry'
 import compose from 'compose'
 import arity from 'arity'
 import not from 'not'
-import * as functions from 'functions'
-import * as sequence from 'sequence'
+import * as basics from 'basics'
 
 export default assign(
-	sequence.sequence
-	, {
-		filters: sequence.filters
-		, placeholder
-		, doc
-		, partial, curry, compose, arity, not
-	}
-	, functions
+	{ arity, compose, curry, doc, not, partial, placeholder }
+	, basics
 	, map((fn) => curry.debug(fn), { trace, path, equals, map })
 )

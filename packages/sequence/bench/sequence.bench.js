@@ -40,84 +40,83 @@ const inspect = (object, limit) => {
 	return properties.join(', ').slice(0, limit)
 }
 
-function typeOf (a) {
-	const b = typeof a
-	if ('object' === b) {
-		if (!a)
-			return 'null'
-		if (a instanceof Array)
-			return 'array'
-		if (a instanceof Object)
-			return b
-		const c = Object.prototype.toString.call(a)
-		if ('[object Window]' === c)
-			return 'object'
-		if ('[object Array]' === c || 'number' === typeof a.length && 'undefined' !== typeof a.splice && 'undefined' != typeof a.propertyIsEnumerable && !a.propertyIsEnumerable('splice'))
-			return 'array'
-		if ('[object Function]' === c || 'undefined' !== typeof a.call && 'undefined' !== typeof a.propertyIsEnumerable && !a.propertyIsEnumerable('call'))
-			return 'function'
-	} else if ('function' === b && 'undefined' === typeof a.call)
-		return 'object'
-	return b
-}
+// function typeOf (a) {
+// 	const b = typeof a
+// 	if ('object' === b) {
+// 		if (!a)
+// 			return 'null'
+// 		if (a instanceof Array)
+// 			return 'array'
+// 		if (a instanceof Object)
+// 			return b
+// 		const c = Object.prototype.toString.call(a)
+// 		if ('[object Window]' === c)
+// 			return 'object'
+// 		if ('[object Array]' === c || 'number' === typeof a.length && 'undefined' !== typeof a.splice && 'undefined' != typeof a.propertyIsEnumerable && !a.propertyIsEnumerable('splice'))
+// 			return 'array'
+// 		if ('[object Function]' === c || 'undefined' !== typeof a.call && 'undefined' !== typeof a.propertyIsEnumerable && !a.propertyIsEnumerable('call'))
+// 			return 'function'
+// 	} else if ('function' === b && 'undefined' === typeof a.call)
+// 		return 'object'
+// 	return b
+// }
 
-function isObject (a) { return 'object' === typeOf(a) }
-function predicateEntry (predicate) { return (entry) => predicate(entry[1], entry[0]) }
-function mapEntry (mapper) { return (entry) => (entry[1] = mapper(entry[1], entry[0]), entry) }
-function entryValue (entry) { return entry[1] }
-function EntryValue (transformer) {
-  this.transformer = transformer
-}
-EntryValue.of = (transformer) => new EntryValue(transformer)
-EntryValue.prototype["@@transducer/init"] = function init () {
-  return this.transformer["@@transducer/init"]()
-}
-EntryValue.prototype["@@transducer/result"] = function result (accumulator) {
-  return this.transformer["@@transducer/result"](accumulator)
-}
-EntryValue.prototype["@@transducer/step"] = function step (accumulator, entry) {
-  return this.transformer["@@transducer/step"](accumulator, entry[1])
-}
+// function isObject (a) { return 'object' === typeOf(a) }
+// function predicateEntry (predicate) { return (entry) => predicate(entry[1], entry[0]) }
+// function mapEntry (mapper) { return (entry) => (entry[1] = mapper(entry[1], entry[0]), entry) }
+// function EntryValue (transducer) {
+//   this.transducer = transducer
+// }
+// EntryValue.of = (transformer) => new EntryValue(transformer)
+// EntryValue.prototype["@@transducer/init"] = function init () {
+//   return this.transformer["@@transducer/init"]()
+// }
+// EntryValue.prototype["@@transducer/result"] = function result (accumulator) {
+//   return this.transformer["@@transducer/result"](accumulator)
+// }
+// EntryValue.prototype["@@transducer/step"] = function step (accumulator, entry) {
+//   return this.transformer["@@transducer/step"](accumulator, entry[1])
+// }
 
-function push (array, item) { return array.push(item), array }
-let i = 0
-function compose () {
-	switch (arguments.length) {
-		case 0:
-			return id
-		case 1:
-			return arguments[0]
-		default:
-			return t.comp.apply(null, arguments)
-	}
-}
+// function push (array, item) { return array.push(item), array }
+// let i = 0
+// function compose () {
+// 	switch (arguments.length) {
+// 		case 0:
+// 			return id
+// 		case 1:
+// 			return arguments[0]
+// 		default:
+// 			return t.comp.apply(null, arguments)
+// 	}
+// }
 
-function Transduce (input) {
-	this.input = input
-	this.steps = []
-}
-Transduce.from = (input) => new Transduce(input)
-Transduce.prototype = {
-	map (mapper) {
-		this.steps.push(t.map(isObject(this.input) ? mapEntry(mapper) : mapper))
-		return this
-	}
-	, filter (predicate) {
-		this.steps.push(t.filter(isObject(this.input) ? predicateEntry(predicate) : predicate))
-		return this
-	}
-	, reduce (reducer, accumulator) {
-		return t.reduce(t.toFn(compose.apply(null, isObject(this.input) ? this.steps.concat(EntryValue.of) : this.steps), reducer), accumulator, this.input)
-	}
-	, slice (start, end) {
-		start && this.steps.push(t.drop(start))
-		end && this.steps.push(t.take(end - start))
-		return this
-	}
-	, value () {
-		return this.reduce(push, [])
-	}
-}
+// function Transduce (input) {
+// 	this.input = input
+// 	this.steps = []
+// }
+// Transduce.from = (input) => new Transduce(input)
+// Transduce.prototype = {
+// 	map (mapper) {
+// 		this.steps.push(t.map(isObject(this.input) ? mapEntry(mapper) : mapper))
+// 		return this
+// 	}
+// 	, filter (predicate) {
+// 		this.steps.push(t.filter(isObject(this.input) ? predicateEntry(predicate) : predicate))
+// 		return this
+// 	}
+// 	, reduce (reducer, accumulator) {
+// 		return t.reduce(t.toFn(compose.apply(null, isObject(this.input) ? this.steps.concat(EntryValue.of) : this.steps), reducer), accumulator, this.input)
+// 	}
+// 	, slice (start, end) {
+// 		start && this.steps.push(t.drop(start))
+// 		end && this.steps.push(t.take(end - start))
+// 		return this
+// 	}
+// 	, value () {
+// 		return this.reduce(push, [])
+// 	}
+// }
 
 
 

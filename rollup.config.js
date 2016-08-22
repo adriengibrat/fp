@@ -5,7 +5,7 @@ import uglify from 'rollup-plugin-uglify'
 
 const plugins = [ resolve({
 	include: {
-		optims: 'src/utils/optims'
+		optims: 'src/utils/optims/index'
 		, symbols: 'src/utils/symbols'
 	}
 	, paths: ['src']

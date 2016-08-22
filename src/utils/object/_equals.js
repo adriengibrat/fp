@@ -1,5 +1,5 @@
-import is from 'utils/object/is'
-import getPrototypeOf from 'utils/object/getPrototypeOf'
+import getPrototypeOf from 'getPrototypeOf'
+import is from 'is'
 
 /* global Object: false, Array: false */
 

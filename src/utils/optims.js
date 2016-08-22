@@ -1,5 +1,0 @@
-export { default as apply } from 'utils/optims/apply'
-export { default as arrayConcat } from 'utils/optims/arrayConcat'
-export { default as getLength} from 'utils/optims/getLength'
-export { default as setArity } from 'utils/optims/setArity'
-export { default as toArray } from 'utils/optims/toArray'

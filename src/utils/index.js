@@ -1,0 +1,7 @@
+export * from 'object'
+export * from 'optims'
+export { default as doc } from 'doc'
+export { default as map } from 'map'
+export { default as path} from 'path'
+export { default as symbols } from 'symbols'
+export { default as trace } from 'trace'

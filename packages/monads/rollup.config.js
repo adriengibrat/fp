@@ -6,7 +6,7 @@ import uglify from 'rollup-plugin-uglify'
 const plugins = [ resolve({
 	include: {
 		container: 'src/interfaces/container'
-		, optims: 'node_modules/fp/src/utils/optims'
+		, optims: 'node_modules/fp/src/utils/optims/index'
 		, symbols: 'node_modules/fp/src/utils/symbols'
 	}
 	, paths: ['src', 'node_modules/fp/src']
