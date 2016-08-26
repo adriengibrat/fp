@@ -1,9 +1,10 @@
 import hasOwnProperty from 'utils/object/hasOwnProperty'
-import { signature, targetFn } from 'symbols'
+import { setSignature } from 'utils/doc'
+import { targetFn } from 'symbols'
 
-map[signature] = 'map :: (α, ?Integer, ?List L → β) → [α] L, ?Boolean = L.map !== map → [β]'
+setSignature('map :: (α → β) → [α] → [β]', map)
 
-export default function map (iteratee, collection, useMethod = (collection.map[targetFn] || collection.map) !== map) {
+export default function map (iteratee, collection, useMethod = (collection && collection.map && collection.map[targetFn] || collection.map) !== map) {
 	if (typeof collection.map === 'function' && useMethod) // objects with map method (array, functor/monad, etc.)
 		return collection.map(iteratee) 
 

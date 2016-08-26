@@ -1,6 +1,6 @@
-import { signature } from 'symbols'
+import { setSignature } from 'utils/doc'
 
-trace[signature] = 'trace :: String → α → α'
+setSignature('trace :: S → α → α', trace)
 
 /* global console: false */
 

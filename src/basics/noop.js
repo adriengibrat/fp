@@ -1,5 +1,5 @@
-import { signature } from 'symbols'
+import { setSignature } from 'utils/doc'
 
-noop[signature] = 'noop :: α → undefined'
+setSignature('noop :: α → undefined', noop)
 
 export default function noop () {}

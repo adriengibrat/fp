@@ -1,10 +1,8 @@
 import { setArity, apply } from 'optims'
-import { signature } from 'symbols'
+import { setSignature } from 'utils/doc'
 
-not[signature] = 'not :: (α1, …, αN → β) → (α1, …, αN → Boolean !β)'
+const not = fn => setArity(fn.length, function not () { return !apply(fn, this, arguments) })
 
-export default function not (fn) {
-	return setArity(fn.length, function not () {
-		return !apply(fn, this, arguments)
-	})
-}
+setSignature('not :: (* → α) → (* → !α)', not)
+
+export default not

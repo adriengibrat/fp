@@ -1,6 +1,6 @@
-import { signature } from 'symbols'
+import { setSignature } from 'utils/doc'
 
-constant[signature] = 'constant :: α → β → α'
+setSignature('constant :: α → β → α', constant)
 
 export default function constant (value) {
 	return () => value

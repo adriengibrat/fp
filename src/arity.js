@@ -1,11 +1,11 @@
 import { setArity, apply } from 'optims'
-import { signature } from 'symbols'
+import { setSignature } from 'utils/doc'
 
-arity[signature] = 'arity :: (α1, …, αN → β) F, ?Number A = F.length → (α1, …, αA → β)'
+const arity = (arity, fn) => setArity(arity, function Nary () {
+	arguments.length = arity
+	return apply(fn, this, arguments)
+})
 
-export default function arity (fn, arity = fn.length) {
-	return setArity(arity, function Nary () {
-		arguments.length = arity
-		return apply(fn, this, arguments)
-	})
-}
+setSignature('arity :: N → (α1, …, αN, … → β) → (α1, …, αN → β)', arity)
+
+export default arity

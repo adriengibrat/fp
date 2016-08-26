@@ -1,6 +1,6 @@
-import { signature } from 'symbols'
+import { setSignature } from 'utils/doc'
 
-identity[signature] = 'identity :: α → α'
+setSignature('identity :: α → α', identity)
 
 export default function identity (value) {
 	return value

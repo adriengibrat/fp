@@ -1,19 +1,22 @@
 import { setArity, arrayConcat, apply, getLength } from 'optims'
-import { signature, targetFn, boundThis, partialArgs, placeholder } from 'symbols'
+import { setSignature, getSignature } from 'utils/doc'
+import { placeholder, attachPlaceholder } from 'utils/placeholder'
+import { targetFn, boundThis, partialArgs } from 'symbols'
 
-partial[signature] = partialDebug[signature] = 'partial :: (α1, …, αN → β), ?[α1, …] = [] → (…, αN → β)'
+function partial (fn, args = []) {
+	const length = fn.length
 
-partial.placeholder = partialDebug.placeholder = placeholder
+	return setArity(length - getLength(args, length, placeholder), function partiallyApplied () {
+		return apply(fn, this, arrayConcat(args, arguments, placeholder))
+	})
+}
 
-partial.debug = partialDebug
-
-export function partialDebug (fn, args = []) {
+function partialDebug (fn, args = []) {
 	const applied = partial(fn, args)
 
-	/* attach debug info */
 	const target = fn[targetFn] || fn
 	applied.toString = () => `/* partially applied */${ target }`
-	applied[signature] = target[signature]
+	setSignature(getSignature(target), applied)
 	applied[targetFn] = target
 	applied[boundThis] = this
 	applied[partialArgs] = args
@@ -21,10 +24,15 @@ export function partialDebug (fn, args = []) {
 	return applied
 }
 
-export default function partial (fn, args = []) {
-	const length = fn.length
+const setPartialSignature = partial(setSignature, ['partial :: (α1, …, αZ → β) → [α1, …, αM] → (αN, …, αZ → β)'])
+setPartialSignature(partial)
+setPartialSignature(partialDebug)
 
-	return setArity(length - getLength(args, length, placeholder), function partiallyApplied () {
-		return apply(fn, this, arrayConcat(args, arguments, placeholder))
-	})
-}
+attachPlaceholder(partial)
+attachPlaceholder(partialDebug)
+
+partial.debug = partialDebug
+
+export { partial, partialDebug }
+
+export default partial

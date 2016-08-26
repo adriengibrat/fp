@@ -1,14 +1,9 @@
 import { setArity, toArray, arrayConcat, apply } from 'optims'
-import { signature, targetFn } from 'symbols'
+import { targetFn } from 'symbols'
+import { setSignature, getSignature } from 'utils/doc'
 import map from 'utils/map'
 import trace from 'utils/trace'
-
-compose[signature] = composeDebug[signature] = composeTrace[signature] = 
-'compose :: (…, αN → β), …, (α1, … → α2) → (α1, … → β)'
-
-compose.debug = composeDebug
-
-compose.trace = composeTrace
+import { partial } from 'partial'
 
 function composer (args, fn) {
 	return arrayConcat(
@@ -17,24 +12,7 @@ function composer (args, fn) {
 	)
 }
 
-export function composeTrace () {
-	return apply(compose, this, map((fn) => trace('compose', fn), arguments))
-}
-
-export function composeDebug () {
-	const composed = apply(compose, null, arguments)
-	const last = arguments[arguments.length - 1]
-
-	/* attach debug info */
-	const target = last[targetFn] || last
-	composed.toString = () => `/* composed */${ target }`
-	composed[signature] = target[signature]
-	composed[targetFn] = target
-
-	return composed
-}
-
-export default function compose () {
+function compose () {
 	const functions = toArray(arguments)
 	const last = arguments[arguments.length - 1]
 
@@ -42,3 +20,32 @@ export default function compose () {
 		return functions.reduceRight(composer, arguments).shift()
 	})
 }
+
+function composeDebug () {
+	const composed = apply(compose, null, arguments)
+	const last = arguments[arguments.length - 1]
+
+	/* attach debug info */
+	const target = last[targetFn] || last
+	composed.toString = () => `/* composed */${ target }`
+	setSignature(getSignature(target), composed)
+	composed[targetFn] = target
+
+	return composed
+}
+
+function composeTrace () {
+	return apply(compose, this, map(fn => trace('compose', fn), arguments))
+}
+
+const setComposeSignature = partial(setSignature, ['compose :: (…, αZ → β), …, (α1, …, αM → αN) → (α1, …, αM → β)'])
+setComposeSignature(compose)
+setComposeSignature(composeDebug)
+setComposeSignature(composeTrace)
+
+compose.debug = composeDebug
+compose.trace = composeTrace
+
+export { compose, composeDebug, composeTrace }
+
+export default compose
