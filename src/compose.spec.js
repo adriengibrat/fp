@@ -6,8 +6,6 @@ module.exports = function (compose, title) {
 		return 3
 	}
 
-	const array = [1, 2, 3]
-
 	function test () {
 		return [1, 2, 3]
 	}
@@ -57,22 +55,16 @@ module.exports = function (compose, title) {
 		assert.true(_id() === id_() && id_() === three(), 'compose identity')
 
 		const _map = compose(map(id), map(three))
-			.bind(null, array)
 		const map_ = map(compose(id, three))
-			.bind(null, array)
-		assert.deepEqual(_map(), map_(), 'map composition law')
+		assert.deepEqual(_map(test()), map_(test()), 'map composition law')
 
 		const _head = compose(three, head)
-			.bind(null, array)
 		const head_ = compose(head, map(three))
-			.bind(null, array)
-		assert.equal(_head(), head_(), 'map with head')
+		assert.equal(_head(test()), head_(test()), 'map with head')
 
 		const _filter = compose(map(three), filter(compose(odd, three)))
-			.bind(null, array)
 		const filter_ = compose(filter(odd), map(three))
-			.bind(null, array)
-		assert.deepEqual(_filter(), filter_(), 'map with filter')
+		assert.deepEqual(_filter(test()), filter_(test()), 'map with filter')
 
 		assert.end()
 	})
