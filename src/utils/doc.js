@@ -10,6 +10,6 @@ const doc = fn => `doc ${ getSignature(fn) || fn && fn.name || Object.prototype.
 
 setSignature('doc :: (* → *) → String', doc)
 
-export { setSignature, getSignature }
+export { doc, setSignature, getSignature }
 
 export default doc

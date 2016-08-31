@@ -1,4 +1,4 @@
-import hasOwnProperty from 'utils/object/hasOwnProperty'
+import hasOwnProperty from '_hasOwnProperty'
 
 /* global Object: false */
 

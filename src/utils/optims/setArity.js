@@ -1,4 +1,4 @@
-import apply from 'utils/optims/apply'
+import apply from 'apply'
 
 /* global Error: false */
 

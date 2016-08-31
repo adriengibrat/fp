@@ -1,4 +1,4 @@
-import propertyIsEnumerable from 'utils/object/propertyIsEnumerable'
+import propertyIsEnumerable from '_propertyIsEnumerable'
 
 /* global Object: false */
 

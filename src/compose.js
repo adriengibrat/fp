@@ -1,8 +1,6 @@
 import { setArity, toArray, arrayConcat, apply } from 'optims'
 import { targetFn } from 'symbols'
-import { setSignature, getSignature } from 'utils/doc'
-import map from 'utils/map'
-import trace from 'utils/trace'
+import { setSignature, getSignature, map, trace } from 'utils/index'
 import { partial } from 'partial'
 
 function composer (args, fn) {

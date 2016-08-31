@@ -1,6 +1,5 @@
 import { setArity, arrayConcat, apply, getLength } from 'optims'
-import { setSignature, getSignature } from 'utils/doc'
-import { placeholder, attachPlaceholder } from 'utils/placeholder'
+import { placeholder, attachPlaceholder, setSignature, getSignature  } from 'utils/index'
 import { targetFn, boundThis, partialArgs } from 'symbols'
 
 function partial (fn, args = []) {

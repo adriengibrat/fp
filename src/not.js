@@ -1,5 +1,5 @@
 import { setArity, apply } from 'optims'
-import { setSignature } from 'utils/doc'
+import { setSignature } from 'utils/index'
 
 const not = fn => setArity(fn.length, function not () { return !apply(fn, this, arguments) })
 

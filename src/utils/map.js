@@ -1,5 +1,4 @@
-import hasOwnProperty from 'utils/object/hasOwnProperty'
-import { setSignature } from 'utils/doc'
+import { setSignature, hasOwnProperty } from 'utils/index'
 import { targetFn } from 'symbols'
 
 setSignature('map :: (α → β) → [α] → [β]', map)
