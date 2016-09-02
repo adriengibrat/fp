@@ -1,7 +1,6 @@
 dist/
 node_modules/
 npm-debug.log
-/*.tgz
-/isolate-*-v8.log
-/perf/
-/perf.*
+/profile-*
+/*-v8.log
+/*.cpuprofile
