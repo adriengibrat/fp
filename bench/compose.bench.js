@@ -1,34 +1,54 @@
 'use strict';
 
-const benchmark = require('benchmark').Suite
+const Suite = require('benchmark').Suite
 
-const fp = require('../dist/fp')
-const ramda = require('ramda')
+const implementations = [{
+	name: 'fp.compose'
+	, fn: require('../dist/fp').compose
+}, {
+	name: 'fp.compose.debug'
+	, fn: require('../dist/fp').compose.debug
+}, {
+	name: 'ramda.compose'
+	, fn: require('ramda').compose
+}, {
+	name: 'compose-function'
+	, fn: require('compose-function')
+}]
 
-const bench = (test, valid) => new benchmark(test.name)
-	.add('fp.compose', test(fp.compose))
-	.add('fp.compose.debug', test(fp.compose.debug))
-	.add('ramda.compose', test(ramda.compose))
-	.on('start', event => console.log('Bench %s', event.currentTarget.name))
-	.on('cycle', event => console.log('%s %s', valid(event.target.fn) ? '✓' : '✗', event.target))
-	.on('complete', event => console.log('-> Fastest is %s', event.currentTarget.filter('fastest').map('name')))
-	.run()
+const bench = (name, implementations, test, valid) =>
+	new Promise((resolve, reject) => {
+		const suite = new Suite(name)
+			.on('start', event => console.log('Bench %s', event.currentTarget.name))
+			.on('cycle', event => console.log('%s %s', valid(event.target.fn) ? '✓' : '✗', event.target))
+			.on('complete', event => console.log('-> Fastest is %s', event.currentTarget.filter('fastest').map('name')))
+			.on('complete', () => resolve(suite))
+			.on('error', () => reject(suite))
+		implementations.forEach(implementation => suite.add(implementation.name, test(implementation.fn)))
+		suite.run({ async: true })
+	})
 
-function reverse (array) {
-	return array.slice().reverse()
-}
+const reverse = array => array.reverse()
 
-function head (array) {
-	return array[0]
-}
+const head = array => array[2]
 
-// composing process speed
-bench(function composing (compose) {
-	return () => compose(head, reverse)
-}, fn => fn().length === reverse.length)
+const example = (_, $) => [1, 2, 3]
 
-// composed function speed
-bench(function basics (compose) {
-	const composed = compose(head, reverse)
-	return () => composed([1,2,3])
-}, fn => fn() === 3)
+bench(
+	'composing process'
+	, implementations
+	, compose => _ => compose(head, reverse, example)
+	, fn => fn().length === example.length
+)
+.then(bench.bind(null,
+	'composed function'
+	, implementations
+	, compose => compose(head, reverse, example)//.bind(null)
+	, fn => fn() === 1
+))
+.then(bench.bind(null,
+	'composing + composed call'
+	, implementations
+	, compose => _ => compose(head, reverse, example)()
+	, fn => fn() === 1
+))

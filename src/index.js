@@ -11,5 +11,5 @@ import * as basics from 'basics'
 export default assign(
 	{ arity, compose, curry, doc, not, partial, placeholder }
 	, basics
-	, map((fn) => curry.debug(fn), { trace, path, equals, map })
+	, map(fn => curry.debug(fn), { trace, path, equals, map })
 )

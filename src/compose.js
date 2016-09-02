@@ -1,26 +1,35 @@
-import { setArity, toArray, arrayConcat, apply } from 'optims'
+import { setArity, reverse, reduce } from 'optims'
 import { targetFn } from 'symbols'
 import { setSignature, getSignature, map, trace } from 'utils/index'
 import { partial } from 'partial'
 
-function composer (args, fn) {
-	return arrayConcat(
-		[apply(fn, this, toArray(args, fn.length || args.length))],
-		[].slice.call(args, fn.length || 1)
+const composer = (a, b) => function () {
+	return b.call(this, a.apply(this, arguments))
+}
+
+function _compose () {
+	const functions = reverse(arguments)
+	return setArity(
+		functions[0].length
+		, reduce(composer, functions)
 	)
 }
 
 function compose () {
-	const functions = toArray(arguments)
+	const composed = _compose.apply(this, arguments)
 	const last = arguments[arguments.length - 1]
 
-	return setArity(last && last.length || 0, function composed () {
-		return functions.reduceRight(composer, arguments).shift()
-	})
+	/* attach debug info */
+	const target = last[targetFn] || last
+	composed.toString = () => `/* composed */${ target }`
+	// setSignature(getSignature(target), composed)
+	// composed[targetFn] = target
+
+	return composed
 }
 
 function composeDebug () {
-	const composed = apply(compose, null, arguments)
+	const composed = _compose.apply(this, arguments)
 	const last = arguments[arguments.length - 1]
 
 	/* attach debug info */
@@ -33,7 +42,7 @@ function composeDebug () {
 }
 
 function composeTrace () {
-	return apply(compose, this, map(fn => trace('compose', fn), arguments))
+	return _compose.apply(this, map(fn => trace('compose', fn), arguments))
 }
 
 const setComposeSignature = partial(setSignature, ['compose :: (…, αZ → β), …, (α1, …, αM → αN) → (α1, …, αM → β)'])
