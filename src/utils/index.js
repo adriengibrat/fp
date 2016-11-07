@@ -1,8 +1,0 @@
-export * from 'object'
-export * from 'optims'
-export * from 'placeholder'
-export * from 'doc'
-export { default as map } from 'map'
-export { default as path} from '_path'
-export { default as symbols } from 'symbols'
-export { default as trace } from 'trace'

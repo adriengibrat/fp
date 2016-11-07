@@ -17,9 +17,9 @@ if (process.env.build === 'min')
 
 export default {
 	format: 'umd'
-	, entry: process.env.npm_package_jsnext_main
+	, entry: process.env.npm_package_module
 	, dest: process.env.npm_package_main
-	, moduleName: process.env.npm_package_name
+	, moduleName: 'fp'
 	, moduleId: process.env.npm_package_name
 	, banner: `/**
  * ${process.env.npm_package_name} ${process.env.npm_package_version} – ${process.env.npm_package_description}

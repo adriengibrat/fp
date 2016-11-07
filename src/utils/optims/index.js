@@ -1,7 +1,0 @@
-export { default as apply } from 'apply'
-export { default as arrayConcat } from 'arrayConcat'
-export { default as getLength } from 'getLength'
-export { default as reduce } from 'reduce'
-export { default as reverse } from 'reverse'
-export { default as setArity } from 'setArity'
-export { default as toArray } from 'toArray'

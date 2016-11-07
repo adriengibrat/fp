@@ -1,0 +1,39 @@
+{
+  "name": "@fp/arity",
+  "version": "0.0.1",
+  "description": "Higher order function to limit function arity",
+  "author": "Adrien Gibrat <adrien.gibrat@gmail.com>",
+  "license": "MIT",
+  "main": "dist/fp.arity.js",
+  "full:main": "dist/fp.arity.full.js",
+  "min:main": "dist/fp.arity.min.js",
+  "full:min:main": "dist/fp.arity.full.min.js",
+  "module": "src/index.js",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/adriengibrat/fp.git"
+  },
+  "bugs": {
+    "url": "https://github.com/adriengibrat/fp/labels/arity"
+  },
+  "engines": {
+    "npm": ">= 2.1.0"
+  },
+  "scripts": {
+    "start": "npm run build:src -- --watch",
+    "lint": "standard ./src/*",
+    "build": "build",
+    "_build": "npm run build:main && npm run build:full && npm run build:min && npm run build:full:min",
+    "build:src": "rollup --config",
+    "build:main": "npm run build:src -- --external @fp/utils --globals @fp/utils:fp.utils --output $npm_package_main",
+    "build:full": "npm run build:src -- --output $npm_package_full_main",
+    "build:min": "npm run build:src -- --environment build:min --external @fp/utils --globals @fp/utils:fp.utils --output $npm_package_min_main",
+    "build:full:min": "npm run build:src -- --environment build:min --output $npm_package_full_min_main"
+  },
+  "dependencies": {
+    "@fp/utils": "*"
+  },
+  "devDependencies": {
+    "@fp/build": "*"
+  }
+}

@@ -1,51 +1,38 @@
 {
-  "name": "fp",
-  "version": "0.0.1",
-  "description": "Readable, debbuggable & fast ES6 Functional Programming",
+  "name": "fp-packages",
+  "private": true,
+  "description": "Parent repository of fp packages",
   "author": "Adrien Gibrat <adrien.gibrat@gmail.com>",
   "license": "MIT",
-  "main": "dist/fp.js",
-  "min:main": "dist/fp.min.js",
-  "jsnext:main": "src/index.js",
   "repository": {
     "type": "git",
     "url": "git://github.com/adriengibrat/fp.git"
   },
-  "engines": {
-    "npm": ">= 2.0.0"
-  },
   "scripts": {
     "start": "npm run build:src -- --watch",
-    "bench": "npm run bench:curry",
-    "bench:curry": "node bench/curry.bench.js",
-    "bench:compose": "node bench/compose.bench.js",
-    "build": "npm run build:src && npm run build:min",
-    "build:src": "rollup --config",
-    "build:min": "npm run build:src -- --environment build:min --output $npm_package_min_main",
-    "size": "npm run size:src --silent && npm run size:min --silent",
-    "size:format": "wc -c | numfmt --to=iec-i --suffix=B",
-    "size:src": "echo \"$npm_package_name raw size `cat $npm_package_main | npm run size:format`\"",
-    "size:min": "echo \"$npm_package_name minified & gzipped `gzip -9 -c $npm_package_min_main | npm run size:format`\"",
-    "test": "npm run test:partial && npm run test:curry && npm run test:compose",
-    "test:partial": "node test/partial.test.js",
-    "test:curry": "node test/curry.test.js",
-    "test:compose": "node test/compose.test.js"
+    "postinstall": "lerna bootstrap",
+    "test": "lerna run test",
+    "lint": "lerna run lint",
+    "build": "lerna run build",
+    "size": "lerna run size",
+    "bench": "lerna run bench"
   },
   "devDependencies": {
-    "@thisables/curry": "^7.0.0",
-    "compose-function": "^3.0.3",
-    "eslint": "^3.2.2",
-    "rollup": "^0.34.10",
-    "rollup-plugin-buble": "^0.13.0",
-    "rollup-plugin-eslint": "^2.0.2",
-    "rollup-plugin-includepaths": "^0.1.5",
+    "lerna": "2.0.0-beta.31",
+    "rollup": "^0.40.2",
+    "rollup-plugin-buble": "^0.15.0",
+    "rollup-plugin-commonjs": "^7.0.0",
+    "rollup-plugin-eslint": "^3.0.0",
+    "rollup-plugin-node-resolve": "^2.0.0",
     "rollup-plugin-uglify": "^1.0.1",
-    "rollup-watch": "^2.5.0",
-    "tape": "^4.6.0"
+    "rollup-watch": "^3.1.0",
+    "standard": "^8.6.0",
+    "tape": "^4.6.2"
   },
   "optionalDependencies": {
-    "benchmark": "^2.1.1",
-    "lodash": "^4.15.0",
-    "ramda": "^0.22.1"
+    "benchmark": "^2.1.2",
+    "lodash": "^4.16.6",
+    "ramda": "^0.23.0",
+    "compose-function": "^3.0.3"
   }
 }

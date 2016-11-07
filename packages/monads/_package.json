@@ -1,0 +1,38 @@
+{
+  "name": "@fp/monads",
+  "version": "0.0.1",
+  "description": "Functional Programming Monads",
+  "author": "Adrien Gibrat <adrien.gibrat@gmail.com>",
+  "license": "MIT",
+  "main": "dist/fp.monads.js",
+  "min:main": "dist/fp.monads.min.js",
+  "module": "src/index.js",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/adriengibrat/fp.git"
+  },
+  "engines": {
+    "npm": ">= 2.1.0"
+  },
+  "scripts": {
+    "start": "npm run build:src -- --watch",
+    "build": "npm run build:src && npm run build:min",
+    "build:src": "rollup --config",
+    "build:min": "npm run build:src -- --environment build:min --output $npm_package_min_main",
+    "size": "npm run size:src --silent && npm run size:min --silent",
+    "size:format": "wc -c | numfmt --to=iec-i --suffix=B",
+    "size:src": "echo \"$npm_package_name raw size `cat $npm_package_main | npm run size:format`\"",
+    "size:min": "echo \"$npm_package_name minified & gzipped `gzip -9 -c $npm_package_min_main | npm run size:format`\""
+  },
+  "dependencies": {
+    "fp": "file:../.."
+  },
+  "devDependencies": {
+    "rollup": "^0.40.2",
+    "rollup-plugin-buble": "^0.15.0",
+    "rollup-plugin-eslint": "^2.0.2",
+    "rollup-plugin-includepaths": "^0.1.5",
+    "rollup-watch": "^3.1.0",
+    "rollup-plugin-uglify": "^1.0.1"
+  }
+}

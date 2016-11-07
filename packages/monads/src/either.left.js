@@ -3,8 +3,8 @@ import { signature } from 'symbols'
 import Noop from 'noop'
 
 const Left = container({
-	constructor: function Left (value) { return canning(Left, value) },
-	parent: Noop
+  constructor: function Left (value) { return canning(Left, value) },
+  parent: Noop
 })
 
 Left.of = Left

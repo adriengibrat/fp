@@ -1,6 +1,8 @@
 dist/
 node_modules/
+.nyc_output/
+coverage/
 npm-debug.log
-/profile-*
-/*-v8.log
-/*.cpuprofile
+profile-*
+*-v8.log
+*.cpuprofile

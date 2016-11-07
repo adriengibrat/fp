@@ -1,0 +1,66 @@
+{
+  "name": "fp",
+  "version": "0.0.1",
+  "description": "Readable, debbuggable & fast ES6 Functional Programming",
+  "author": "Adrien Gibrat <adrien.gibrat@gmail.com>",
+  "license": "MIT",
+  "main": "dist/fp.js",
+  "min:main": "dist/fp.min.js",
+  "module": "src/fp.js",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/adriengibrat/fp.git"
+  },
+  "engines": {
+    "npm": ">= 2.1.0"
+  },
+  "scripts": {
+    "start": "npm run build:src -- --watch",
+    "build": "npm run build:src && npm run build:min",
+    "build:src": "rollup --config --input $npm_package_module --output $npm_package_main",
+    "build:min": "rollup --config --input $npm_package_module --environment build:min --output $npm_package_min_main"
+  },
+  "devDependencies": {
+    "eslint": "^3.9.1",
+    "lerna": "2.0.0-beta.31",
+    "rollup": "^0.40.2",
+    "rollup-plugin-buble": "^0.15.0",
+    "rollup-plugin-commonjs": "^7.0.0",
+    "rollup-plugin-eslint": "^3.0.0",
+    "rollup-plugin-filesize": "^1.0.1",
+    "rollup-plugin-node-resolve": "^2.0.0",
+    "rollup-plugin-uglify": "^1.0.1",
+    "rollup-watch": "^3.1.0",
+    "standard": "^8.6.0",
+    "tape": "^4.6.2"
+  },
+  "dependencies": {
+    "@fp/utils": "^0.0.1",
+    "@fp/arity": "^0.0.1",
+    "@fp/constant": "^0.0.1",
+    "@fp/identity": "^0.0.1",
+    "@fp/noop": "^0.0.1",
+    "@fp/not": "^0.0.1",
+    "@fp/trace": "^0.0.1",
+    "@fp/map": "^0.0.1",
+    "@fp/path": "^0.0.1",
+    "@fp/partial": "^0.0.1",
+    "@fp/curry": "^0.0.1",
+    "@fp/compose": "^0.0.1",
+    "@fp/doc": "^0.0.1"
+  },
+  "bundledDependencies": [
+    "@fp/utils",
+    "@fp/arity",
+    "@fp/constant",
+    "@fp/identity",
+    "@fp/noop",
+    "@fp/not",
+    "@fp/trace",
+    "@fp/map",
+    "@fp/path",
+    "@fp/partial",
+    "@fp/curry",
+    "@fp/compose"
+  ]
+}

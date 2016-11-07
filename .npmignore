@@ -1,9 +1,7 @@
 .bithoundrc
 .eslintrc
 .npmignore
-/bench
-/packages
-*.spec.js
-/test
-/playground.html
-/rollup.config.js
+**/*.spec.js
+**/test.js
+**/rollup.config.js
+playground.html

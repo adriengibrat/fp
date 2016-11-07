@@ -1,0 +1,39 @@
+{
+  "name": "@fp/path",
+  "version": "0.0.1",
+  "description": "Get object value from path function",
+  "author": "Adrien Gibrat <adrien.gibrat@gmail.com>",
+  "license": "MIT",
+  "main": "dist/fp.path.js",
+  "min:main": "dist/fp.path.min.js",
+  "module": "src/index.js",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/adriengibrat/fp.git"
+  },
+  "bugs": {
+    "url": "https://github.com/adriengibrat/fp/labels/path"
+  },
+  "engines": {
+    "npm": ">= 2.1.0"
+  },
+  "scripts": {
+    "start": "npm run build:src -- --watch",
+    "lint": "standard ./src/*",
+    "build": "npm run build:main && npm run build:min",
+    "build:src": "rollup --config",
+    "build:main": "npm run build:src -- --output $npm_package_main",
+    "build:min": "npm run build:src -- --environment build:min --output $npm_package_min_main",
+    "size": "npm run size:main --silent && npm run size:min --silent",
+    "size:format": "wc -c | numfmt --to=iec-i --suffix=B",
+    "size:main": "echo \"$npm_package_name size `cat $npm_package_main | npm run size:format`\"",
+    "size:min": "echo \"$npm_package_name minified & gzipped `gzip -9 -c $npm_package_min_main | npm run size:format`\""
+  },
+  "devDependencies": {
+    "rollup": "^0.40.2",
+    "rollup-plugin-buble": "^0.15.0",
+    "rollup-plugin-eslint": "^2.0.2",
+    "rollup-watch": "^3.1.0",
+    "standard": "^8.6.0"
+  }
+}

@@ -1,0 +1,55 @@
+{
+  "name": "@fp/curry",
+  "version": "0.0.1",
+  "description": "Curry function",
+  "author": "Adrien Gibrat <adrien.gibrat@gmail.com>",
+  "license": "MIT",
+  "main": "dist/fp.curry.js",
+  "module": "src/index.js",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/adriengibrat/fp.git"
+  },
+  "bugs": {
+    "url": "https://github.com/adriengibrat/fp/labels/curry"
+  },
+  "engines": {
+    "npm": ">= 2.1.0"
+  },
+  "scripts": {
+    "start": "rollup --input $npm_package_module --output $npm_package_main --watch",
+    "lint": "standard",
+    "pretest": "rollup --format cjs --input test.js --output test.bundle.js --sourcemap inline",
+    "test": "ava test.bundle.js",
+    "posttest": "rm test.bundle.js",
+    "coverage": "nyc --reporter=lcov --reporter=text-lcov npm test",
+    "bench": "rollup --format cjs --input bench.js --output _bench.js && node _bench.js",
+    "build": "build && build min && build full && build full min"
+  },
+  "standard": {
+    "ignore": [
+      "dist/",
+      "test.bundle.js"
+    ]
+  },
+  "nyc": {
+    "exclude": [
+      "**/*.spec.js",
+      "test.js"
+    ]
+  },
+  "dependencies": {
+    "@fp/utils": "^0.0.1",
+    "@fp/partial": "^0.0.1",
+    "@fp/identity": "^0.0.1"
+  },
+  "devDependencies": {
+    "@fp/build": "^0.0.1",
+    "ava": "^0.17.0"
+  },
+  "optionalDependencies": {
+    "benchmark": "^2.1.2",
+    "lodash": "^4.16.6",
+    "ramda": "^0.23.0"
+  }
+}

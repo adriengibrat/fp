@@ -1,0 +1,40 @@
+{
+  "name": "@fp/build",
+  "private": true,
+  "version": "0.0.1",
+  "description": "Rollup config",
+  "author": "Adrien Gibrat <adrien.gibrat@gmail.com>",
+  "license": "MIT",
+  "main": "build.js",
+  "module": "rollup.config.js",
+  "bin": {
+    "build": "build.js",
+    "rollup": "node_modules/.bin/rollup",
+    "standard": "node_modules/.bin/standard",
+    "ava": "node_modules/.bin/ava",
+    "tape": "node_modules/.bin/tape"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/adriengibrat/fp.git"
+  },
+  "engines": {
+    "npm": ">= 2.1.0"
+  },
+  "scripts": {
+    "build": "rollup --config --input src/build.js --output build.js"
+  },
+  "dependencies": {
+    "rollup": "^0.40.2",
+    "rollup-plugin-buble": "^0.15.0",
+    "rollup-plugin-commonjs": "^7.0.0",
+    "rollup-plugin-eslint": "^3.0.0",
+    "rollup-plugin-filesize": "^1.0.1",
+    "rollup-plugin-node-resolve": "^2.0.0",
+    "rollup-plugin-uglify": "^1.0.1",
+    "rollup-watch": "^3.1.0",
+    "standard": "^8.6.0",
+    "tape": "^4.6.2",
+    "ava": "^0.17.0"
+  }
+}

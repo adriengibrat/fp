@@ -1,11 +1,12 @@
 {
   "ignore": [
-    "bench/**",
-    "packages/**",
-    "rollup.config.js"
+    "**/rollup.config.js",
+    "packages/*/bench.js",
+    "packages/sequence/**",
+    "packages/monad/**"
   ],
   "test": [
-    "/test/**",
-    "**/.spec.js"
+    "**/test.js",
+    "**/*.spec.js"
   ]
 }

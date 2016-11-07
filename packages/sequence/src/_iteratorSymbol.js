@@ -1,1 +1,1 @@
-export default 'undefined' === typeof Symbol ? '@@iterator' : Symbol.iterator
+export default typeof Symbol === 'undefined' ? '@@iterator' : Symbol.iterator
