@@ -62,7 +62,7 @@ npm run test:compose
 ```sh
 npm run bench
 ```
-curried functions are 1.7× faster than [Lodash][lodash] and 7× faster than [Ramda][ramda] ;)
+~curried functions are 1.7× faster than [Lodash][lodash] and 7× faster than [Ramda][ramda] ;)~ not true anymore
 
 ## Documentation
 
