@@ -1,5 +1,8 @@
 fp λ
 ====
+
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/5e832e9c341c4b918c9b8307e5b73442)](https://www.codacy.com/app/adrien-gibrat/fp?utm_source=github.com&utm_medium=referral&utm_content=adriengibrat/fp&utm_campaign=badger)
+
 > Readable, debbuggable & fast ES6 Functional Programming
 
 `fp` offers a collection of usefull functions :
